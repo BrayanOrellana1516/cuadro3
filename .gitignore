@@ -1,0 +1,12 @@
+/node_modules
+/.next
+.env.local
+/.idea/
+/eslin-report.html
+/pnpm-lock.yaml
+/package-lock.json
+/yarn.lock
+/out
+.vscode/launch.json
+/yarn-error.log
+/.scannerwork/

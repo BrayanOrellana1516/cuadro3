@@ -1,0 +1,145 @@
+td,
+.p-paginator-current {
+  padding: 1px !important;
+  font-size: 0.8rem;
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+}
+
+th {
+  padding: 5px !important;
+  font-size: 0.9rem;
+}
+
+.p-accordion-header-link {
+  padding: 1rem !important;
+}
+
+.p-sidebar-content {
+  padding: 5px !important;
+}
+
+.p-dropdown-label.p-inputtext {
+  padding: 1vh !important;
+}
+
+.p-autocomplete-item {
+  padding: 1vh !important;
+}
+
+.p-panelmenu-header-link {
+  padding: 2vh !important;
+}
+
+/*
+.p-inputtextarea.p-inputtext.p-component{
+  color: #000 !important; 
+}
+/* autocomplete */
+.p-button.p-component.p-autocomplete-dropdown.p-button-icon-only {
+  height: 2rem !important;
+}
+
+.p-inputtext.p-component.p-autocomplete-input.p-autocomplete-dd-input {
+  height: 2rem !important;
+}
+
+.p-inputnumber-button-up {
+  height: 1px !important;
+}
+
+.p-inputnumber-button-down {
+  height: 1px !important;
+}
+
+.p-toolbar.p-component {
+  border-top-right-radius: 0 !important;
+  border-top-left-radius: 0 !important;
+}
+.green-background {
+  background-color: #c8e6c9;
+  font-weight: bold;
+  color: #256029;
+}
+
+.red-background {
+  background-color: #ffcdd2;
+  font-weight: bold;
+  color: #c63737;
+}
+
+.yellow-background {
+  background-color: #feedaf;
+  font-weight: bold;
+  color: #8a5340;
+}
+
+div.snp-input-small-filter input.p-inputtext {
+  width: 100px;
+  height: 30px;
+}
+
+div.estiloSNP {
+  color: #212a5c !important;
+  font-weight: bold;
+}
+div.p-fileupload.p-fileupload-basic.p-component.estiloSNP {
+  color: #212a5c !important;
+}
+button.p-fileupload.p-fileupload-basic.p-component.estiloSNP {
+  color: #212a5c !important;
+}
+button.p-button.p-inputnumber-button {
+  background: #212a5c !important;
+}
+button.p-button.p-component.p-datepicker-trigger.p-button-icon-only {
+  background: #212a5c !important;
+}
+.p-tabview .p-tabview-nav li.p-highlight .p-tabview-nav-link {
+  border-color: #212a5c !important;
+  color: #212a5c !important;
+}
+.p-selectbutton .p-button.p-highlight {
+  background: #212a5c !important;
+  border-color: #212a5c !important;
+  color: #ffffff;
+}
+button.p-button.p-component.p-highlight.font-light.text-sm.justify-content-center {
+  background: #212a5c !important;
+}
+button.p-button.p-component.p-autocomplete-dropdown.p-button-icon-only {
+  background: #212a5c !important;
+}
+button.p-button.estiloSNP {
+  background: #212a5c !important;
+  color: #fff !important;
+  font-weight: bold;
+  border: #212a5c !important;
+}
+div.p-toolbar.p-component.toolbarSNP {
+  background: #212a5c !important;
+}
+.p-divider.p-divider-horizontal {
+  margin: 0;
+  padding: 0 1.25rem;
+  height: 1px;
+  background: #212a5c !important;
+}
+div.p-sidebar {
+  background: #212a5c !important;
+}
+
+/*
+.p-inputnumber-input{
+  height: 1.5rem !important;
+  width: 6rem !important;
+}
+*/
+div.p-column-filter-row {
+  display: flex;
+  width: 83%;
+  flex-wrap: wrap;
+}
+div.p-multiselect-panel {
+  width: 100% !important;
+}

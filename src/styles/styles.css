@@ -143,3 +143,26 @@ div.p-column-filter-row {
 div.p-multiselect-panel {
   width: 100% !important;
 }
+.product-badge {
+  border-radius: 2px;
+  padding: 0.25em 0.5rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.3px;
+}
+
+.product-badge.status-bajo {
+  background: #f0a344;
+  color: #ffffff;
+}
+
+.product-badge.status-alto {
+  background: #c63737;
+  color: #ffffff;
+}
+
+.product-badge.status-medio {
+  background: #f56b23;
+  color: #ffffff;
+}

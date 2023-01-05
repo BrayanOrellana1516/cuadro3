@@ -3,6 +3,8 @@ const nextConfig = {
   reactStrictMode: false,
   swcMinify: true,
   output: 'standalone',
+  fs: false,
+  path: false,
   async headers() {
     return [
       {

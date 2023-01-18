@@ -1,4 +1,4 @@
-import { Button } from 'primereact/button';
+import { FilterMatchMode } from 'primereact/api';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 import { Fragment, useEffect, useState } from 'react';
@@ -7,6 +7,9 @@ export default function VentanaDetalles({ dataHistorial }) {
   const [checked1, setChecked1] = useState(false);
   const [checked2, setChecked2] = useState(false);
   const [fileData, setFileData] = useState();
+  const [filters2, setFilters2] = useState({
+    nombre: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  });
 
   useEffect(() => {
     //  readFile(dir);
@@ -31,8 +34,7 @@ export default function VentanaDetalles({ dataHistorial }) {
 
   const header = (
     <div className="table-header">
-      Cartera vencida de la parroquia
-      <Button icon="pi pi-refresh" />
+      <h3 className="p-m-0">Cartera vencida de la parroquia</h3>
     </div>
   );
 
@@ -90,9 +92,19 @@ export default function VentanaDetalles({ dataHistorial }) {
           metaKeySelection={false}
           scrollHeight="flex"
           size="small"
+          filterDisplay="row"
+          filters={filters2}
+          globalFilterFields={['nombre']}
         >
           <Column field="cedula" header="Cédula"></Column>
-          <Column field="nombre" header="Cliente" body={nombreBody}></Column>
+          <Column
+            field="nombre"
+            header="Cliente"
+            body={nombreBody}
+            filter
+            filterPlaceholder="Nombre"
+            showFilterMatchModes={false}
+          ></Column>
           <Column field="tipoDocumento" header="Tipo de Documento"></Column>
           <Column field="numeroDocumento" header="Número de Documento"></Column>
           {/* <Column field="porfolioVencido" header="Deuda Inicial" body={formatCurrency}></Column> */}

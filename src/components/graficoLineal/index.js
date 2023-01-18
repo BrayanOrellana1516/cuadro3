@@ -22,6 +22,7 @@ export default function GraficoLineal({ dataHistorial, dataMapa }) {
 
     if (dataMapa !== '') {
       dataMapa.map((features) => {
+        console.log('features', features);
         _carteraZonas.push(features.properties.gdp_md_est);
         _zonas.push(features.properties.name);
       });
@@ -41,12 +42,13 @@ export default function GraficoLineal({ dataHistorial, dataMapa }) {
     //   else if (data.puntuacion > 30) contadorRiesgoBajo++;
     // });
     console.log(contadorRiesgoAlto, contadorRiesgoMedio, contadorRiesgoBajo);
+
     setLineStylesData({
-      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'gato'],
       datasets: [
         {
           label: 'Third Dataset',
-          data: [12, 51, 62, 33, 21, 62, 45],
+          data: ordenar,
           fill: true,
           borderColor: '#FFA726',
           tension: 0.6,

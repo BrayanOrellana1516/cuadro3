@@ -19,6 +19,7 @@ export default function GraficoLineal({ dataHistorial, dataMapa }) {
     let contadorRiesgoAlto = 0;
     let _carteraZonas = [];
     let _zonas = [];
+    let fechaValorLetra = [];
 
     if (dataMapa !== '') {
       dataMapa.map((features) => {
@@ -27,6 +28,43 @@ export default function GraficoLineal({ dataHistorial, dataMapa }) {
         _zonas.push(features.properties.name);
       });
     }
+    console.log('dataHistorial', dataHistorial);
+    dataHistorial.map((data) => {
+      //si la data.fecha.getFullYear() se encuentra en el arreglo fechaValorLetra, entonces sumar data.valorLetra a la posicion del arreglo donde se encuentra la data.fecha.getFullYear()
+      let fecha = new Date(data.fecha).getFullYear();
+      if (isNaN(fecha)) {
+        //  console.log('fechaNAN', data.fecha);
+      }
+      if (data.fecha === 'NULL') {
+        fecha = new Date(dataHistorial.filter((dataf) => data.cedula === dataf.cedula)[0].plazoLetra).getFullYear();
+        if (isNaN(fecha))
+          fecha = parseInt(dataHistorial.filter((dataf) => data.cedula === dataf.cedula)[0].plazoLetra.split('/')[2]);
+      }
+
+      //   console.log('fecha', fecha);
+      let fechaEncontrada = fechaValorLetra.find((fechaBusqueda, index) => fechaBusqueda.fecha === fecha);
+      //obtener el indice de la fecha encontrada
+
+      if (fechaEncontrada === undefined) {
+        //arregrar a nuevo fechaValorLetra con indice fecha y valor data.valorLetra
+        fechaValorLetra.push({ fecha: fecha, valor: parseFloat(data.valorLetra.toString().replace(',', '.')) });
+        //   fechaValorLetra[fecha] = parseFloat(data.valorLetra.toString().replace(',', '.'));
+      } else {
+        //sumar data.valorLetra a la posicion del arreglo donde se encuentra la fecha
+        fechaValorLetra[fechaValorLetra.indexOf(fechaEncontrada)].valor =
+          fechaValorLetra[fechaValorLetra.indexOf(fechaEncontrada)]?.valor +
+          parseFloat(data.valorLetra.toString().replace(',', '.'));
+        //  fechaValorLetra[fecha] = fechaValorLetra[fecha] + parseFloat(data.valorLetra.toString().replace(',', '.'));
+      }
+
+      // if (fechaValorLetra.includes(fecha)) {
+      //   fechaValorLetra[fecha] = fechaValorLetra[fecha] + parseFloat(data.valorLetra.toString().replace(',', '.'));
+      // } else {
+      //   fechaValorLetra.push(fecha);
+      //   fechaValorLetra[fecha] = parseFloat(data.valorLetra.toString().replace(',', '.'));
+      // }
+    });
+    console.log('fechaValorLetra', fechaValorLetra);
 
     setZonas(_zonas);
     console.log('zonas', _zonas);
@@ -42,13 +80,33 @@ export default function GraficoLineal({ dataHistorial, dataMapa }) {
     //   else if (data.puntuacion > 30) contadorRiesgoBajo++;
     // });
     console.log(contadorRiesgoAlto, contadorRiesgoMedio, contadorRiesgoBajo);
+    let años = [];
+    let valores = [];
+    let valorAcumulado = 0;
+    //ordenar arreglo de fechaValorLetra por fecha
+    fechaValorLetra.sort((a, b) => a.fecha - b.fecha);
+
+    fechaValorLetra.map((data) => {
+      años.push(data.fecha);
+      // añadir a arreglo valores el valor de la data.valor en adicion a los valores que ya estan en el arreglo valores
+      // valores = [...valores, data.valor];
+      //sumar todos los valores dentro del arreglo valores
+      valores.map((valor) => {
+        valorAcumulado = valorAcumulado + valor;
+      });
+      valores.push(valorAcumulado + data.valor);
+
+      // valores.push(...valores, data.valor);
+    });
+    console.log('años', años);
+    console.log('valores', valores);
 
     setLineStylesData({
-      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'gato'],
+      labels: años,
       datasets: [
         {
           label: 'Third Dataset',
-          data: ordenar,
+          data: valores,
           fill: true,
           borderColor: '#FFA726',
           tension: 0.6,

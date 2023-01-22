@@ -5,7 +5,6 @@ import { Toast } from 'primereact/toast';
 import { createContext, useRef, useState } from 'react';
 
 import axios from '@lib/axios';
-import axiosArrastre from '@lib/axiosArrastre';
 import {
   UseEnviarDatosIndicadores,
   enviarDatosFormularioObras,
@@ -1062,41 +1061,6 @@ function FormCreacionProvider(props) {
   const [codigoPrograma, setCodigoPrograma] = useState(0);
 
   let proyectoFormulario = {};
-
-  const enviarDatosFormularioProyectos = (param) => {
-    axiosArrastre({
-      method: 'post',
-      url: `/api/proyecto/creaProyecto`,
-      data: param,
-    }).then((response) => {
-      if (response.status === 201) {
-        toast.current.show({
-          severity: 'success',
-          summary: 'Guardado',
-          detail: 'Se ha guardado correctamente la información',
-          life: 3000,
-        });
-        router.push(
-          {
-            pathname: '/inversion/proyectos',
-            query: {
-              ruc: rolId,
-              ci: rolId,
-              password: rolId,
-            },
-          },
-          '/inversion/proyectos',
-        );
-      } else {
-        toast.current.show({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Ha ocurrido un error al guardar la información',
-          life: 3000,
-        });
-      }
-    });
-  };
 
   const formularioProyecto = useFormik({
     initialValues: {

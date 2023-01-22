@@ -2,7 +2,6 @@ import fileDownload from 'js-file-download';
 import { useEffect, useState } from 'react';
 
 import axios from '@lib/axios';
-import axiosArrastre from '@lib/axiosArrastre';
 
 //INVERSIÓN
 const useObtenerCatalogoPadre = (idCatalogoPadre) => {
@@ -62,7 +61,7 @@ const useObtenerCatalogoCategoriaContrato = () => {
   return catalogoCategoriaContrato;
 };
 const enviarDatosFormularioProyectoCur = (param) => {
-  axiosArrastre({
+  axios({
     method: 'post',
     url: `/api/cur/creaCur`,
     data: param,
@@ -101,7 +100,7 @@ const useObtenerArrastreProyectos = () => {
   const [listadoContratos, setListadoContratos] = useState([]);
 
   useEffect(() => {
-    axiosArrastre.get(`/api/proyecto/consultaProyecto`).then((response) => {
+    axios.get(`/api/proyecto/consultaProyecto`).then((response) => {
       setListadoContratos(response.data);
     });
   }, []);
@@ -111,7 +110,7 @@ const useObtenerArrastreProyectos = () => {
 const obtenerArrastreProyectos = async () => {
   let listadoObras = [];
 
-  await axiosArrastre.get(`/api/proyecto/consultaProyecto`).then((response) => {
+  await axios.get(`/api/proyecto/consultaProyecto`).then((response) => {
     listadoObras = response.data;
   });
   return listadoObras;
@@ -128,7 +127,7 @@ const obtenerFinanCredito = async (proyecto) => {
 const obtenerArrastreObrasCup = async (param) => {
   let listadoObras = [];
   if (!param) return listadoObras;
-  await axiosArrastre.get(`api/obra/consultarObras/${param}`).then((response) => {
+  await axios.get(`api/obra/consultarObras/${param}`).then((response) => {
     listadoObras = response.data;
   });
   return listadoObras;
@@ -145,7 +144,7 @@ const obtenerConsultarFichas = async (param) => {
 const obtenerArrastreContratoObras = async (param) => {
   let listadoObras = [];
   if (!param) return listadoObras;
-  await axiosArrastre.get(`api/contrato/consultarContratoObra?codigoObra=${param}`).then((response) => {
+  await axios.get(`api/contrato/consultarContratoObra?codigoObra=${param}`).then((response) => {
     listadoObras = response.data;
   });
   return listadoObras;
@@ -155,7 +154,7 @@ const useObtenerArrastreListadoCur = () => {
   const [listadoCur, setListadoCur] = useState([]);
 
   useEffect(() => {
-    axiosArrastre.get(`/api/cur/consultaCur`).then((response) => {
+    axios.get(`/api/cur/consultaCur`).then((response) => {
       setListadoCur(response.data);
     });
   }, []);
@@ -165,7 +164,7 @@ const useObtenerArrastreListadoCur = () => {
 const obtenerArrastreContratos = async () => {
   let listadoObras = [];
 
-  await axiosArrastre.get(`/api/contrato/consultarContratos?idEntidad=0`).then((response) => {
+  await axios.get(`/api/contrato/consultarContratos?idEntidad=0`).then((response) => {
     listadoObras = response.data;
   });
   return listadoObras;
@@ -175,7 +174,7 @@ const useObtenerArrastreContratos = () => {
   const [listadoContratos, setListadoContratos] = useState([]);
 
   useEffect(() => {
-    axiosArrastre.get(`/api/contrato/consultarContratos?idEntidad=0`).then((response) => {
+    axios.get(`/api/contrato/consultarContratos?idEntidad=0`).then((response) => {
       setListadoContratos(response.data);
     });
   }, []);
@@ -186,7 +185,7 @@ const useObtenerArrastreObrasListado = () => {
   const [listadoObras, setListadoObras] = useState([]);
 
   useEffect(() => {
-    axiosArrastre
+    axios
       .get(`/api/obra/consultarObras?idEntidad=0`) //idEntidad esta quemado porque aun no se implementa el modulo de autenticacion
       .then((response) => {
         setListadoObras(response.data);
@@ -198,7 +197,7 @@ const useObtenerArrastreObrasListado = () => {
 const obtenerArrastreObrasFormulario = async (param) => {
   let listadoObras = [];
   if (!param) return listadoObras;
-  await axiosArrastre.get(`/api/obra/consultarObra?codigoObra=` + param).then((response) => {
+  await axios.get(`/api/obra/consultarObra?codigoObra=` + param).then((response) => {
     listadoObras = response.data;
   });
   return listadoObras;

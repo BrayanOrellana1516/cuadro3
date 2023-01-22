@@ -15,23 +15,20 @@
  *
  */
 import fileDownload from 'js-file-download';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FilterMatchMode } from 'primereact/api';
-import { Badge } from 'primereact/badge';
+import { AutoComplete } from 'primereact/autocomplete';
 import { Button } from 'primereact/button';
+import { Card } from 'primereact/card';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 import { Dropdown } from 'primereact/dropdown';
 import { OverlayPanel } from 'primereact/overlaypanel';
 import { Toolbar } from 'primereact/toolbar';
-import { Fragment, useContext, useEffect, useRef, useState } from 'react';
+import { Fragment, useContext, useRef, useState } from 'react';
 
 import { FormCreacionContext } from '@hooks/formCreacionContext';
 import Axios from '@lib/axios';
-import MiPerfilAutenticacion from '@components/forms/autenticacion/perfil';
-import { AutoComplete } from 'primereact/autocomplete';
-import { Card } from 'primereact/card';
 
 /** @function
  *@name Navbar
@@ -73,75 +70,14 @@ export default function Navbar(props) {
   const leftContents = (
     <Fragment>
       <i className="p-toolbar-separator" />
-      <Button icon="pi pi-bars" className="bg-white text-900" onClick={props.onToggleMenuClick} />
+
       <i className="p-toolbar-separator" />
       <div className="flex flex-column estiloSNP">
-        <Link
-          as="/inversion"
-          passHref
-          href={{
-            pathname: '/inversion',
-            query: { ci: rolId, password: rolId, ruc: rolId }, // the data
-          }}
-        >
-          <div className=" text-2xl text-50 mt-1 mb-2">Secretaría Nacional de Planificación</div>
-        </Link>
         <div className="font-medium text-50">Sistema Integrado de Planificación e Inversión Pública</div>
       </div>
     </Fragment>
   );
 
-  useEffect(() => {
-    if (isNaN(rolId)) setRolId(0);
-    if (rolId === 0) {
-      setRol('Administrador');
-      obtenerNotificaciones(usuarioId).then((datos) => {
-        setData(datos);
-      });
-    } else {
-      obtenerSolicitudesProyectos().then((tipos) => {
-        let _tipoSolicitudes = [];
-
-        tipos.forEach((element) => {
-          if (element.valor3 === 'S') {
-            _tipoSolicitudes.push(element);
-          }
-        });
-
-        setTipoSolicitudes(_tipoSolicitudes);
-      });
-      consultaNotificacionesAnalisis(rolId).then((datos) => {
-        setData(datos);
-      });
-    }
-    switch (rolId) {
-      default:
-      case 0: {
-        setRol('Entidad Externa');
-        break;
-      }
-      case 1: {
-        setRol('Analista de Inversión');
-        break;
-      }
-      case 2: {
-        setRol('Director de Planificación e Inversión');
-        break;
-      }
-      case 3: {
-        setRol('Subsecretario de Planificación');
-        break;
-      }
-      case 4: {
-        setRol('Subsecretario General');
-        break;
-      }
-      case 5: {
-        setRol('Secretario General');
-        break;
-      }
-    }
-  }, [rolId, usuarioId]);
   /**
    *@function
    * Se obtienen las solicitudes de proyectos
@@ -278,29 +214,24 @@ export default function Navbar(props) {
   const rightContents = (
     <Fragment>
       <div className="flex flex-column justify-content-center">
-      <div className="p-fluid flex align-items-end">
-        <Button className="estiloSNP" onClick={(e) => op.current.toggle(e)} aria-haspopup aria-controls="overlay_panel">
-          {' '}
-          <i className="pi pi-fw pi-inbox   p-overlay-badge" style={{ fontSize: '1.5rem' }}>
-            <Badge size="small" value={data.length} severity="danger"></Badge>
-          </i>
-        </Button>
-        <Button className="estiloSNP" onClick={(e) => user.current.toggle(e)} aria-haspopup aria-controls="overlay_panel">
-          {' '}
-          <i className="pi pi-fw pi-user p-overlay-badge" style={{ fontSize: '1.5rem' }}>
-           
-          </i>
-        </Button>
+        <div className="p-fluid flex align-items-end">
+          <Button
+            className="estiloSNP"
+            onClick={(e) => op.current.toggle(e)}
+            aria-haspopup
+            aria-controls="overlay_panel"
+          ></Button>
+          <Button
+            className="estiloSNP"
+            onClick={(e) => user.current.toggle(e)}
+            aria-haspopup
+            aria-controls="overlay_panel"
+          >
+            {' '}
+            <i className="pi pi-fw pi-user p-overlay-badge" style={{ fontSize: '1.5rem' }}></i>
+          </Button>
         </div>
-        
-        <Button
-          label="Conectado"
-          icon="pi pi-circle-fill text-green-500 "
-          className=" h-1rem hidden md:inline-flex align-items-center justify-content-center bg-white text-900 border-400 border-1 border-round "
-        ></Button>
-        <span style={{ color: 'white' }}>
-          {rolId}: {rol}
-        </span>
+
         <OverlayPanel
           ref={op}
           breakpoints={{ '1000px': '75vw', '640px': '100vw' }}
@@ -356,39 +287,38 @@ export default function Navbar(props) {
         >
           <h2>Mi perfil &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</h2>
           <Card className=" card  justify-align-center">
-        <div className="p-fluid grid formgrid col-12 justify-content-center  ">
-          <h4 className="col-1">Nombre:&nbsp;&nbsp;</h4>
-          <div className='col 2'></div>
-          <div>
-            <AutoComplete/>
-          </div>
-        </div>
-        <br/>
-        <div className="p-fluid grid formgrid col-12 justify-content-center ">
-          <h4 className="col-1">Apellido:&nbsp;&nbsp;</h4>
-          <div className='col 2'></div>
-          <div >
-            <AutoComplete/>
-          </div >
-        </div>
-        <br/>
-        <div className="p-fluid grid formgrid col-12 justify-content-center ">
-          <h4 className="col-1">Cargo:&nbsp;&nbsp;</h4>
-          <div className='col 2'></div>
-          <div>
-            <AutoComplete/>
-          </div >
-        </div>
-        <br/>
-        <div className="p-fluid grid formgrid col-12 justify-content-center ">
-          <h4 className="col-1">Institucion&nbsp;&nbsp;</h4>
-          <div className='col 2'></div>
-          <div>
-            <AutoComplete/>
-          </div >
-        </div>
-      </Card>
-      
+            <div className="p-fluid grid formgrid col-12 justify-content-center  ">
+              <h4 className="col-1">Nombre:&nbsp;&nbsp;</h4>
+              <div className="col 2"></div>
+              <div>
+                <AutoComplete />
+              </div>
+            </div>
+            <br />
+            <div className="p-fluid grid formgrid col-12 justify-content-center ">
+              <h4 className="col-1">Apellido:&nbsp;&nbsp;</h4>
+              <div className="col 2"></div>
+              <div>
+                <AutoComplete />
+              </div>
+            </div>
+            <br />
+            <div className="p-fluid grid formgrid col-12 justify-content-center ">
+              <h4 className="col-1">Cargo:&nbsp;&nbsp;</h4>
+              <div className="col 2"></div>
+              <div>
+                <AutoComplete />
+              </div>
+            </div>
+            <br />
+            <div className="p-fluid grid formgrid col-12 justify-content-center ">
+              <h4 className="col-1">Institucion&nbsp;&nbsp;</h4>
+              <div className="col 2"></div>
+              <div>
+                <AutoComplete />
+              </div>
+            </div>
+          </Card>
         </OverlayPanel>
       </div>
     </Fragment>

@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import historialCrediticio from '@components/common/csvjson.json';
 import GraficoBarras from '@components/graficoBarras';
 import GraficoLineal from '@components/graficoLineal';
+import Navbar from '@components/layouts/Navbar';
 import Map from '@components/map';
 import VentanaDetalles from '@components/ventanaDetalles';
 
@@ -128,6 +129,9 @@ export default function Home() {
       </Head>
       <div className="flex flex-column w-full">
         <div className=" flex-row w-full">
+          <Navbar />
+        </div>
+        <div className="px-3 flex-row w-full">
           <Splitter>
             <SplitterPanel className="flex align-items-center justify-content-center" size={100} minSize={10}>
               <Map className={styles.homeMap} center={DEFAULT_CENTER} zoom={16} onClick={(e) => getSelecction()}>
@@ -187,10 +191,10 @@ export default function Home() {
               </Splitter>
             </SplitterPanel>
           </Splitter>
-        </div>
-        <div className="flex flex-row w-full">
           <GraficoLineal className=" flex w-full" dataHistorial={dataHistorial} dataMapa={dataMapa} />
         </div>
+
+        <div className="flex flex-row w-full"></div>
       </div>
     </>
   );

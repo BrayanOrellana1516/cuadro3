@@ -46,12 +46,29 @@ export default function GraficoPolar({ dataHistorial, dataMapa }) {
       datasets: [
         {
           label: 'Cartera Vencida por Zonas',
-          backgroundColor: 'rgba(255,99,132,0.2)',
-          borderColor: 'rgba(255,99,132,1)',
-          pointBackgroundColor: 'rgba(255,99,132,1)',
-          pointBorderColor: '#495057',
-          pointHoverBackgroundColor: '#fff',
-          pointHoverBorderColor: 'rgba(255,99,132,1)',
+          backgroundColor: [
+            '#42A5F5',
+            '#66BB6A',
+            '#FFA726',
+            '#26C6DA',
+            '#7E57C2',
+
+            '#FF6B6B',
+            '#FFA26B',
+            '#FFF16B',
+            '#D9FF6B',
+            '#A2FF6B',
+
+            '#6BFF89',
+            '#6BFFB8',
+            '#56F9DB',
+            '#3CFDFD',
+            '#31C8EF',
+
+            '#318CEF',
+            '#316DEF',
+            '#3531EF',
+          ],
           data: ordenar,
         },
       ],
@@ -68,21 +85,15 @@ export default function GraficoPolar({ dataHistorial, dataMapa }) {
     },
     scales: {
       r: {
-        pointLabels: {
-          color: '#495057',
-        },
         grid: {
-          color: '#ebedef',
-        },
-        angleLines: {
-          color: '#ebedef',
+          color: '#495057',
         },
       },
     },
   });
   return (
     <div className="card flex justify-content-center surface-100 border-round-lg border-double border-blue-500">
-      <Chart type="radar" data={chartData} options={lightOptions} style={{ width: '100%' }} />
+      <Chart type="polarArea" data={chartData} options={lightOptions} style={{ width: '100%' }} />
     </div>
   );
 }

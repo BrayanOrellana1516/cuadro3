@@ -31,7 +31,7 @@ export default function GraficoBarras({ dataHistorial, dataMapa }) {
     console.log('zonas', _zonas);
 
     //ordenar arreglo de carteraZonas
-    ordenar = _carteraZonas.sort((a, b) => a - b);
+    ordenar = _carteraZonas;
     console.log('cartera', ordenar);
     setCarteraZonas(ordenar);
 
@@ -72,16 +72,16 @@ export default function GraficoBarras({ dataHistorial, dataMapa }) {
           color: '#495057',
         },
         grid: {
-          color: '#ebedef',
+          color: '#495057',
         },
         angleLines: {
-          color: '#ebedef',
+          color: '#495057',
         },
       },
     },
   });
   return (
-    <div className="card flex justify-content-center surface-100 border-round-lg border-double border-blue-500">
+    <div className="card flex justify-content-center surface-200 border-round-lg border-double border-blue-500">
       <Chart type="radar" data={chartData} options={lightOptions} style={{ width: '100%' }} />
     </div>
   );

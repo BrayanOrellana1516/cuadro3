@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import { Calendar } from 'primereact/calendar';
+import { Knob } from 'primereact/knob';
 import { useEffect, useState } from 'react';
 
 import historialCrediticio from '@components/common/csvjson.json';
@@ -27,6 +28,7 @@ export default function Home() {
   const handleDataScopeChange = (event) => {
     console.log(event);
   };
+  const [totalCartera, setTotalCartera] = useState(0);
   const getColor = (sizePortfolio) => {
     let renderColor = { color: '#f6081b', value: 5100 };
 
@@ -89,6 +91,7 @@ export default function Home() {
     ];
 
     // recorrer filtroHistorialCrediticio ,sumar interes_letra y valorLetra que coincidan con zona
+    let _totalCartera = 0;
     filtroHistorialCrediticio = filtroHistorialCrediticio.map((item) => {
       // si item.zona se encuentra en parroquias entonces sumar interes_letra y valorLetra y asignar a parroquias
       parroquias.forEach((parroquia) => {
@@ -97,10 +100,15 @@ export default function Home() {
             parroquia[1] +
             parseFloat(item.interes_letra.toString().replace(',', '.')) +
             parseFloat(item.valorLetra.toString().replace(',', '.'));
+          _totalCartera =
+            _totalCartera +
+            parseFloat(item.interes_letra.toString().replace(',', '.')) +
+            parseFloat(item.valorLetra.toString().replace(',', '.'));
         }
       });
       return item;
     });
+    setTotalCartera(_totalCartera);
     console.log('parroquias', parroquias);
 
     // console.log('filtroHistorialCrediticio', filtroHistorialCrediticio);
@@ -122,6 +130,10 @@ export default function Home() {
 
   const getSelecction = () => {
     console.log('press');
+  };
+
+  const calcularPorcentaje = (valor) => {
+    return (valor * 100) / totalCartera;
   };
 
   return (
@@ -150,8 +162,8 @@ export default function Home() {
             />
           </div>
           <div className="flex flex-colum w-full">
-            <div className=" w-6 p-1 p-4 surface-100 border-round-lg border-double border-blue-500">
-              <Map className={styles.homeMap} center={DEFAULT_CENTER} zoom={16} onClick={(e) => getSelecction()}>
+            <div className=" w-6 p-4 m-2 surface-200  border-round-lg border-double border-blue-500">
+              <Map className={styles.homeMap} center={DEFAULT_CENTER} zoom={15} onClick={(e) => getSelecction()}>
                 {({ TileLayer, Marker, Popup, Polygon }) => (
                   <>
                     <TileLayer
@@ -182,11 +194,31 @@ export default function Home() {
                                   // style={getColor}
                                 >
                                   <Popup>
-                                    <h3>{features.properties.name}</h3>
-                                    <p>
-                                      Cartera Vencida: $ {features.properties.gdp_md_est}
-                                      <br />
-                                    </p>
+                                    <div className="flex flex-row">
+                                      <h2>
+                                        Detalle de Cartera
+                                        <br />
+                                      </h2>
+                                    </div>
+                                    <div className="flex flex-row">
+                                      <div className="flex flex-column">
+                                        {features.properties.gdp_md_est > 0 ? (
+                                          <>
+                                            <p className="flex font-bold">Porcentaje de la zona</p>
+                                            <Knob
+                                              value={calcularPorcentaje(features.properties.gdp_md_est).toFixed(2)}
+                                              valueTemplate={'{value}%'}
+                                            />
+                                          </>
+                                        ) : (
+                                          <Knob value={0} />
+                                        )}
+                                      </div>
+                                      <div className="flex pl-3 flex-column">
+                                        <h4 className="flex pt-5">{features.properties.name} : </h4>${' '}
+                                        {features.properties.gdp_md_est}
+                                      </div>
+                                    </div>
                                   </Popup>
                                 </Polygon>
                               ))
@@ -216,7 +248,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <div className="flex flex-row w-full">
+        <div className="flex flex-row px-4 w-full">
           <GraficoLineal className=" flex w-full" dataHistorial={dataHistorial} dataMapa={dataMapa} />
         </div>
       </div>

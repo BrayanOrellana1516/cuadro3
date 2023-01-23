@@ -98,17 +98,15 @@ export default function GraficoLineal({ dataHistorial, dataMapa }) {
 
       // valores.push(...valores, data.valor);
     });
-    console.log('años', años);
-    console.log('valores', valores);
 
     setLineStylesData({
       labels: años,
       datasets: [
         {
-          label: 'Third Dataset',
+          label: 'Crecimiento de Cartera Histórico',
           data: valores,
           fill: true,
-          borderColor: '#FFA726',
+          borderColor: '#FF856B',
           tension: 0.6,
           backgroundColor: 'rgba(255,167,38,0.2)',
         },
@@ -155,7 +153,7 @@ export default function GraficoLineal({ dataHistorial, dataMapa }) {
   const { basicOptions } = getLightTheme();
 
   return (
-    <div className="flex w-full justify-content-center">
+    <div className="flex w-full justify-content-center p-4 surface-100 border-round-lg border-double border-blue-500">
       <Chart type="line" className="w-full " data={lineStylesData} options={basicOptions} />
     </div>
   );

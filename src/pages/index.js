@@ -1,10 +1,13 @@
 import Head from 'next/head';
-import { Splitter, SplitterPanel } from 'primereact/splitter';
+import { Calendar } from 'primereact/calendar';
+import { Knob } from 'primereact/knob';
 import { useEffect, useState } from 'react';
 
 import historialCrediticio from '@components/common/csvjson.json';
 import GraficoBarras from '@components/graficoBarras';
 import GraficoLineal from '@components/graficoLineal';
+import GraficoPolar from '@components/graficoPolar';
+import Navbar from '@components/layouts/Navbar';
 import Map from '@components/map';
 import VentanaDetalles from '@components/ventanaDetalles';
 
@@ -21,9 +24,11 @@ export default function Home() {
   const [dataMapa, setDataMapa] = useState([]);
   const csvFilePath = '../components/common/historial_crediticio2.csv';
   const csv = require('csvtojson');
+  const [fechaSeleccionada, setFechaSeleccionada] = useState(new Date());
   const handleDataScopeChange = (event) => {
     console.log(event);
   };
+  const [totalCartera, setTotalCartera] = useState(0);
   const getColor = (sizePortfolio) => {
     let renderColor = { color: '#f6081b', value: 5100 };
 
@@ -86,6 +91,7 @@ export default function Home() {
     ];
 
     // recorrer filtroHistorialCrediticio ,sumar interes_letra y valorLetra que coincidan con zona
+    let _totalCartera = 0;
     filtroHistorialCrediticio = filtroHistorialCrediticio.map((item) => {
       // si item.zona se encuentra en parroquias entonces sumar interes_letra y valorLetra y asignar a parroquias
       parroquias.forEach((parroquia) => {
@@ -94,10 +100,15 @@ export default function Home() {
             parroquia[1] +
             parseFloat(item.interes_letra.toString().replace(',', '.')) +
             parseFloat(item.valorLetra.toString().replace(',', '.'));
+          _totalCartera =
+            _totalCartera +
+            parseFloat(item.interes_letra.toString().replace(',', '.')) +
+            parseFloat(item.valorLetra.toString().replace(',', '.'));
         }
       });
       return item;
     });
+    setTotalCartera(_totalCartera);
     console.log('parroquias', parroquias);
 
     // console.log('filtroHistorialCrediticio', filtroHistorialCrediticio);
@@ -121,16 +132,38 @@ export default function Home() {
     console.log('press');
   };
 
+  const calcularPorcentaje = (valor) => {
+    return (valor * 100) / totalCartera;
+  };
+
   return (
     <>
       <Head>
         <title>Cuadro de Mandos</title>
       </Head>
-      <div className="flex flex-column w-full">
+      <div className="flex flex-column w-full bg-yellow-50 border-blue-100">
         <div className=" flex-row w-full">
-          <Splitter>
-            <SplitterPanel className="flex align-items-center justify-content-center" size={100} minSize={10}>
-              <Map className={styles.homeMap} center={DEFAULT_CENTER} zoom={16} onClick={(e) => getSelecction()}>
+          <Navbar />
+        </div>
+        <div className="px-3 flex-row border-blue-100">
+          <div className="flex flex-row w-full justify-content-center py-3 ">
+            {/* div con negrita y cursiva */}
+
+            <div className="font-italic font-semibold flex align-content-center pr-3">Predicción por año</div>
+            <Calendar
+              id="icon"
+              view="year"
+              dateFormat="yy"
+              minDate={new Date(2023, 0, 1)}
+              maxDate={new Date(2025, 11, 31)}
+              value={fechaSeleccionada}
+              onChange={(e) => setFechaSeleccionada(e.value)}
+              showIcon
+            />
+          </div>
+          <div className="flex flex-colum w-full">
+            <div className=" w-6 p-4 m-2 surface-200  border-round-lg border-double border-blue-500">
+              <Map className={styles.homeMap} center={DEFAULT_CENTER} zoom={15} onClick={(e) => getSelecction()}>
                 {({ TileLayer, Marker, Popup, Polygon }) => (
                   <>
                     <TileLayer
@@ -161,11 +194,31 @@ export default function Home() {
                                   // style={getColor}
                                 >
                                   <Popup>
-                                    <h3>{features.properties.name}</h3>
-                                    <p>
-                                      Cartera Vencida: $ {features.properties.gdp_md_est}
-                                      <br />
-                                    </p>
+                                    <div className="flex flex-row">
+                                      <h2>
+                                        Detalle de Cartera
+                                        <br />
+                                      </h2>
+                                    </div>
+                                    <div className="flex flex-row">
+                                      <div className="flex flex-column">
+                                        {features.properties.gdp_md_est > 0 ? (
+                                          <>
+                                            <p className="flex font-bold">Porcentaje de la zona</p>
+                                            <Knob
+                                              value={calcularPorcentaje(features.properties.gdp_md_est).toFixed(2)}
+                                              valueTemplate={'{value}%'}
+                                            />
+                                          </>
+                                        ) : (
+                                          <Knob value={0} />
+                                        )}
+                                      </div>
+                                      <div className="flex pl-3 flex-column">
+                                        <h4 className="flex pt-5">{features.properties.name} : </h4>${' '}
+                                        {features.properties.gdp_md_est}
+                                      </div>
+                                    </div>
                                   </Popup>
                                 </Polygon>
                               ))
@@ -175,20 +228,27 @@ export default function Home() {
                   </>
                 )}
               </Map>
-            </SplitterPanel>
-            <SplitterPanel className="flex align-items-center justify-content-center" size={60}>
-              <Splitter layout="vertical">
-                <SplitterPanel>
-                  <VentanaDetalles className="flex" dataHistorial={dataHistorial} />
-                </SplitterPanel>
-                <SplitterPanel>
-                  <GraficoBarras dataHistorial={dataHistorial} dataMapa={dataMapa} />
-                </SplitterPanel>
-              </Splitter>
-            </SplitterPanel>
-          </Splitter>
+            </div>
+            <div className="w-6 p-1">
+              <div className="flex flex-column w-full border-cyan-800">
+                <VentanaDetalles dataHistorial={dataHistorial} />
+                <div className="flex flex-row h-full pt-5">
+                  <div className=" w-6 h-5rem pr-1 border-blue-300">
+                    <GraficoBarras
+                      className="flex w-full h-5rem border-cyan-800"
+                      dataHistorial={dataHistorial}
+                      dataMapa={dataMapa}
+                    />
+                  </div>
+                  <div className="w-6">
+                    <GraficoPolar className="w-full h-full" dataHistorial={dataHistorial} dataMapa={dataMapa} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div className="flex flex-row w-full">
+        <div className="flex flex-row px-4 w-full">
           <GraficoLineal className=" flex w-full" dataHistorial={dataHistorial} dataMapa={dataMapa} />
         </div>
       </div>

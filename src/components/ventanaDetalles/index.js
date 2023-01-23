@@ -62,6 +62,14 @@ export default function VentanaDetalles({ dataHistorial }) {
       minimumFractionDigits: 2,
     });
   };
+  const formatCurrencyInteres = (rowData) => {
+    return parseFloat(rowData.interes_letra.toString().replace(',', '.')).toLocaleString('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      maximumFractionDigits: 2,
+      minimumFractionDigits: 2,
+    });
+  };
 
   const nombreBody = (rowData) => {
     return (
@@ -71,8 +79,8 @@ export default function VentanaDetalles({ dataHistorial }) {
     );
   };
   return (
-    <div className="datatable-templating-demo">
-      <div className="card">
+    <div className="datatable-templating-demo ">
+      <div className="card py-4 px-2 surface-200 border-round-lg border-double border-blue-500">
         <DataTable
           value={dataHistorial}
           header={header}
@@ -80,9 +88,11 @@ export default function VentanaDetalles({ dataHistorial }) {
           emptyMessage="No hay clientes con cartera vencida en esta parroquia"
           paginator
           rows={5}
+          resizableColumns="fit"
+          showGridlines
           sortMode="single"
           removableSort
-          scrollable
+          // scrollable
           scrollDirection="both"
           // rowGroupMode="rowspan"
           // groupRowsBy="nombre"
@@ -95,6 +105,7 @@ export default function VentanaDetalles({ dataHistorial }) {
           filterDisplay="row"
           filters={filters2}
           globalFilterFields={['nombre']}
+          //setear el tamaño del filter
         >
           <Column field="cedula" header="Cédula"></Column>
           <Column
@@ -104,6 +115,7 @@ export default function VentanaDetalles({ dataHistorial }) {
             filter
             filterPlaceholder="Nombre"
             showFilterMatchModes={false}
+            showFilterMenu={false}
           ></Column>
           <Column field="tipoDocumento" header="Tipo de Documento"></Column>
           <Column field="numeroDocumento" header="Número de Documento"></Column>
@@ -111,8 +123,8 @@ export default function VentanaDetalles({ dataHistorial }) {
           <Column field="letra" header="Letra Deuda"></Column>
           <Column field="valorLetra" header="Valor Letra" body={formatCurrency}></Column>
           <Column field="plazoLetra" header="Vencimiento de Letra"></Column>
-          <Column field="interes_letra" header="Interes Letra"></Column>
-          <Column field="estado" header="estatus"></Column>
+          <Column field="interes_letra" header="Interes Letra" body={formatCurrencyInteres}></Column>
+          <Column field="estado" header="Estado"></Column>
           <Column field="puntuacion" header="Score" body={statusBodyTemplate}></Column>
         </DataTable>
       </div>

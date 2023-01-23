@@ -5,7 +5,7 @@ import 'primereact/resources/primereact.css';
 import 'primereact/resources/themes/lara-light-indigo/theme.css';
 import { useEffect, useState } from 'react';
 
-export default function GraficoBarras({ dataHistorial, dataMapa }) {
+export default function GraficoPolar({ dataHistorial, dataMapa }) {
   const [checked1, setChecked1] = useState(false);
   const [checked2, setChecked2] = useState(false);
   const [carteraZonas, setCarteraZonas] = useState([]);

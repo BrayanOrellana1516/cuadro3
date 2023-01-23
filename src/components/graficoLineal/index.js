@@ -155,7 +155,7 @@ export default function GraficoLineal({ dataHistorial, dataMapa }) {
   const { basicOptions } = getLightTheme();
 
   return (
-    <div className="flex w-full justify-content-center">
+    <div className="flex w-full justify-content-center p-4 surface-100 border-round-lg border-double border-blue-500">
       <Chart type="line" className="w-full " data={lineStylesData} options={basicOptions} />
     </div>
   );

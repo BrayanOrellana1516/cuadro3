@@ -1,10 +1,11 @@
 import Head from 'next/head';
-import { Splitter, SplitterPanel } from 'primereact/splitter';
+import { Calendar } from 'primereact/calendar';
 import { useEffect, useState } from 'react';
 
 import historialCrediticio from '@components/common/csvjson.json';
 import GraficoBarras from '@components/graficoBarras';
 import GraficoLineal from '@components/graficoLineal';
+import GraficoPolar from '@components/graficoPolar';
 import Navbar from '@components/layouts/Navbar';
 import Map from '@components/map';
 import VentanaDetalles from '@components/ventanaDetalles';
@@ -22,6 +23,7 @@ export default function Home() {
   const [dataMapa, setDataMapa] = useState([]);
   const csvFilePath = '../components/common/historial_crediticio2.csv';
   const csv = require('csvtojson');
+  const [fechaSeleccionada, setFechaSeleccionada] = useState(new Date());
   const handleDataScopeChange = (event) => {
     console.log(event);
   };
@@ -127,13 +129,28 @@ export default function Home() {
       <Head>
         <title>Cuadro de Mandos</title>
       </Head>
-      <div className="flex flex-column w-full">
+      <div className="flex flex-column w-full bg-yellow-50 border-blue-100">
         <div className=" flex-row w-full">
           <Navbar />
         </div>
-        <div className="px-3 flex-row w-full">
-          <Splitter>
-            <SplitterPanel className="flex align-items-center justify-content-center" size={100} minSize={10}>
+        <div className="px-3 flex-row border-blue-100">
+          <div className="flex flex-row w-full justify-content-center py-3 ">
+            {/* div con negrita y cursiva */}
+
+            <div className="font-italic font-semibold flex align-content-center pr-3">Predicción por año</div>
+            <Calendar
+              id="icon"
+              view="year"
+              dateFormat="yy"
+              minDate={new Date(2023, 0, 1)}
+              maxDate={new Date(2025, 11, 31)}
+              value={fechaSeleccionada}
+              onChange={(e) => setFechaSeleccionada(e.value)}
+              showIcon
+            />
+          </div>
+          <div className="flex flex-colum w-full">
+            <div className=" w-6 p-1 p-4 surface-100 border-round-lg border-double border-blue-500">
               <Map className={styles.homeMap} center={DEFAULT_CENTER} zoom={16} onClick={(e) => getSelecction()}>
                 {({ TileLayer, Marker, Popup, Polygon }) => (
                   <>
@@ -179,22 +196,29 @@ export default function Home() {
                   </>
                 )}
               </Map>
-            </SplitterPanel>
-            <SplitterPanel className="flex align-items-center justify-content-center" size={60}>
-              <Splitter layout="vertical">
-                <SplitterPanel>
-                  <VentanaDetalles className="flex" dataHistorial={dataHistorial} />
-                </SplitterPanel>
-                <SplitterPanel>
-                  <GraficoBarras dataHistorial={dataHistorial} dataMapa={dataMapa} />
-                </SplitterPanel>
-              </Splitter>
-            </SplitterPanel>
-          </Splitter>
+            </div>
+            <div className="w-6 p-1">
+              <div className="flex flex-column w-full border-cyan-800">
+                <VentanaDetalles dataHistorial={dataHistorial} />
+                <div className="flex flex-row h-full pt-5">
+                  <div className=" w-6 h-5rem pr-1 border-blue-300">
+                    <GraficoBarras
+                      className="flex w-full h-5rem border-cyan-800"
+                      dataHistorial={dataHistorial}
+                      dataMapa={dataMapa}
+                    />
+                  </div>
+                  <div className="w-6">
+                    <GraficoPolar className="w-full h-full" dataHistorial={dataHistorial} dataMapa={dataMapa} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="flex flex-row w-full">
           <GraficoLineal className=" flex w-full" dataHistorial={dataHistorial} dataMapa={dataMapa} />
         </div>
-
-        <div className="flex flex-row w-full"></div>
       </div>
     </>
   );

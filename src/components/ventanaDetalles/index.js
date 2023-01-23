@@ -71,8 +71,8 @@ export default function VentanaDetalles({ dataHistorial }) {
     );
   };
   return (
-    <div className="datatable-templating-demo">
-      <div className="card">
+    <div className="datatable-templating-demo ">
+      <div className="card py-4 surface-100 border-round-lg border-double border-blue-500">
         <DataTable
           value={dataHistorial}
           header={header}

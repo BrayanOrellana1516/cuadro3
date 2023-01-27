@@ -1,10 +1,10 @@
 import Head from 'next/head';
-import { Calendar } from 'primereact/calendar';
 import { Knob } from 'primereact/knob';
 import { useEffect, useState } from 'react';
 
 import historialCrediticio from '@components/common/csvjson.json';
 import GraficoBarras from '@components/graficoBarras';
+import GraficoBarrasTop from '@components/graficoBarrasTop';
 import GraficoLineal from '@components/graficoLineal';
 import GraficoPolar from '@components/graficoPolar';
 import Navbar from '@components/layouts/Navbar';
@@ -21,6 +21,8 @@ const DEFAULT_CENTER = [-2.002265, -79.485339];
  **/
 export default function Home() {
   const [dataHistorial, setDataHistorial] = useState([]);
+  const [dataHistorialATiempo, setDataHistorialATiempo] = useState([]);
+
   const [dataMapa, setDataMapa] = useState([]);
   const csvFilePath = '../components/common/historial_crediticio2.csv';
   const csv = require('csvtojson');
@@ -60,6 +62,7 @@ export default function Home() {
   useEffect(() => {}, []);
 
   useEffect(() => {
+    console.log('historialCrediticio', historialCrediticio);
     let filtroHistorialCrediticio = historialCrediticio.filter((registro) => {
       return (
         registro.estado === 'ATRASO' &&
@@ -68,6 +71,16 @@ export default function Home() {
         registro.nombre !== 'CAICEDO BAYAS MARIA CRISTINA'
       );
     });
+
+    let filtroHistorialCrediticioATiempo = historialCrediticio.filter((registro) => {
+      return (
+        registro.estado === 'A TIEMPO' &&
+        !isNaN(registro.cedula) &&
+        registro.nombre !== 'BURGOS BARRES CHISTER' &&
+        registro.nombre !== 'CAICEDO BAYAS MARIA CRISTINA'
+      );
+    });
+    setDataHistorialATiempo(filtroHistorialCrediticioATiempo);
 
     const parroquias = [
       ['Centro', 0],
@@ -146,8 +159,8 @@ export default function Home() {
           <Navbar />
         </div>
         <div className="px-3 flex-row border-blue-100">
-          <div className="flex flex-row w-full justify-content-center py-3 ">
-            {/* div con negrita y cursiva */}
+          {/* <div className="flex flex-row w-full justify-content-center py-3 ">
+      
 
             <div className="font-italic font-semibold flex align-content-center pr-3">Predicción por año</div>
             <Calendar
@@ -160,10 +173,10 @@ export default function Home() {
               onChange={(e) => setFechaSeleccionada(e.value)}
               showIcon
             />
-          </div>
+          </div> */}
           <div className="flex flex-colum w-full">
-            <div className=" w-6 p-4 m-2 surface-200  border-round-lg border-double border-blue-500">
-              <Map className={styles.homeMap} center={DEFAULT_CENTER} zoom={15} onClick={(e) => getSelecction()}>
+            <div className=" w-5 h-25rem p-4 m-2 surface-200  border-round-lg border-double border-blue-500">
+              <Map className={styles.homeMap} center={DEFAULT_CENTER} zoom={15} onMouseEnter={(e) => getSelecction()}>
                 {({ TileLayer, Marker, Popup, Polygon }) => (
                   <>
                     <TileLayer
@@ -184,7 +197,9 @@ export default function Home() {
                                   key={features.properties.name}
                                   positions={coordinates}
                                   pathOptions={getColor(features.properties.gdp_md_est)}
-                                  onClick={(e) => console.log('ddddd')}
+                                  onClick={(event) => {
+                                    console.log(event);
+                                  }}
                                   onMouseEnter={(e) => console.log('ddddd')}
                                   onMouseLeave={(e) => console.log('ddddd')}
                                   //LLamar a funcion getSelecction y enviar feactures
@@ -217,6 +232,7 @@ export default function Home() {
                                       <div className="flex pl-3 flex-column">
                                         <h4 className="flex pt-5">{features.properties.name} : </h4>${' '}
                                         {features.properties.gdp_md_est}
+                                        {getSelecction()}
                                       </div>
                                     </div>
                                   </Popup>
@@ -228,8 +244,14 @@ export default function Home() {
                   </>
                 )}
               </Map>
+
+              <GraficoBarrasTop
+                className="flex w-5 border-cyan-800"
+                dataHistorial={dataHistorial}
+                dataMapa={dataMapa}
+              />
             </div>
-            <div className="w-6 p-1">
+            <div className="w-7 p-1">
               <div className="flex flex-column w-full border-cyan-800">
                 <VentanaDetalles dataHistorial={dataHistorial} />
                 <div className="flex flex-row h-full pt-5">
@@ -249,7 +271,12 @@ export default function Home() {
           </div>
         </div>
         <div className="flex flex-row px-4 w-full">
-          <GraficoLineal className=" flex w-full" dataHistorial={dataHistorial} dataMapa={dataMapa} />
+          <GraficoLineal
+            className=" flex w-full"
+            dataHistorial={dataHistorial}
+            dataMapa={dataMapa}
+            dataHistorialATiempo={dataHistorialATiempo}
+          />
         </div>
       </div>
     </>

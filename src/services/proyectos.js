@@ -772,18 +772,18 @@ const descargaArchivoDeshabilitante = (uuid) => {
 
 const descargaInformesDictamen = (codigoSolicitud) => {
   axios.get('/api/proyecto/descargarArchivosDictamen?idSolicitud=' + codigoSolicitud).then((response) => {
-    console.log('id SOlicitud', response.data.entry.id);
+    // console.log('id SOlicitud', response.data.entry.id);
     let estado = response.data.entry;
-    console.log('Toda Info', estado);
+    // console.log('Toda Info', estado);
     obtenerID(estado);
   });
 };
 
 const obtenerID = (codigo) => {
-  console.log('data', codigo);
+  // console.log('data', codigo);
   if (codigo.status === 'DONE') {
-    console.log('Siguiente Paso');
-    //axios.get("/api/archivo/descargar?uuidArchivo="+codigo.id).then((response2)=>{ console.log("info",response2);
+    // console.log('Siguiente Paso');
+    //axios.get("/api/archivo/descargar?uuidArchivo="+codigo.id).then((response2)=>{ // console.log("info",response2);
 
     axios
       .get('/api/archivo/descargar?uuidArchivo=' + codigo.id, {
@@ -795,17 +795,17 @@ const obtenerID = (codigo) => {
   } else {
     axios.get('/api/archivo/consultar/estado-descarga-todos?uuidArchivo=' + codigo.id).then((response2) => {
       obtenerID(response2.data.entry);
-      console.log('En proceso');
+      // console.log('En proceso');
     });
   }
 };
 
 const descargaArchivosHabilitantes = (codigoSolicitud) => {
-  console.log('codigoSol', codigoSolicitud);
+  // console.log('codigoSol', codigoSolicitud);
   axios.get('/api/proyecto/descargaArchivosHabilitantes?idSolicitud=' + codigoSolicitud).then((response) => {
-    console.log('id SOlicitud', response.data.entry.id);
+    // console.log('id SOlicitud', response.data.entry.id);
     let estado = response.data.entry;
-    console.log('Toda Info', estado);
+    // console.log('Toda Info', estado);
     obtenerID(estado);
   });
 };
@@ -1043,8 +1043,8 @@ const obtenerGrupoGastoPai = (codigoProyecto, anio) => {
 
 /* envia peticion POST de manera parametrizada */
 const enviarPostUniversal = (direccion, param) => {
-  console.log('direccion', direccion);
-  console.log('param', param);
+  // console.log('direccion', direccion);
+  // console.log('param', param);
   axios({
     method: 'post',
     url: direccion,
@@ -1057,7 +1057,7 @@ const enviarPostUniversal = (direccion, param) => {
 /* Obtener Fuentes de financiamietno de proyecto */
 const obtenerProformasPai = (periodo) => {
   let promise = '';
-  console.log('periodo', periodo);
+  // console.log('periodo', periodo);
   if (periodo === undefined) {
     promise = axios.get('/api/proformapai/consultarProformaPai');
   } else {

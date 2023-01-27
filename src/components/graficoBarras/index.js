@@ -28,11 +28,11 @@ export default function GraficoBarras({ dataHistorial, dataMapa }) {
     }
 
     setZonas(_zonas);
-    console.log('zonas', _zonas);
+    // console.log('zonas', _zonas);
 
     //ordenar arreglo de carteraZonas
     ordenar = _carteraZonas;
-    console.log('cartera', ordenar);
+    // console.log('cartera', ordenar);
     setCarteraZonas(ordenar);
 
     // dataHistorial.map((data) => {
@@ -40,12 +40,12 @@ export default function GraficoBarras({ dataHistorial, dataMapa }) {
     //   else if (data.puntuacion > -50 && data.puntuacion <= 30) contadorRiesgoMedio++;
     //   else if (data.puntuacion > 30) contadorRiesgoBajo++;
     // });
-    console.log(contadorRiesgoAlto, contadorRiesgoMedio, contadorRiesgoBajo);
+    // console.log(contadorRiesgoAlto, contadorRiesgoMedio, contadorRiesgoBajo);
     setChartData({
       labels: _zonas,
       datasets: [
         {
-          label: 'Cartera Vencida por Zonas',
+          label: 'Alcance por Zona',
           backgroundColor: 'rgba(255,99,132,0.2)',
           borderColor: 'rgba(255,99,132,1)',
           pointBackgroundColor: 'rgba(255,99,132,1)',
@@ -62,6 +62,15 @@ export default function GraficoBarras({ dataHistorial, dataMapa }) {
     plugins: {
       legend: {
         labels: {
+          color: '#495057',
+        },
+      },
+      title: {
+        display: true,
+        text: 'Radar de Cartera Vencida',
+        font: {
+          size: 20,
+          weight: 600,
           color: '#495057',
         },
       },

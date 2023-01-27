@@ -42,7 +42,6 @@ export default function GraficoLineal({ dataHistorial, dataMapa, dataHistorialAT
     let fechaValorLetra = [];
     let fechaValorLetraATiempo = [];
 
-    // console.log('dataHistorial', dataHistorial);
     dataHistorial.map((data) => {
       //si la data.fecha.getFullYear() se encuentra en el arreglo fechaValorLetra, entonces sumar data.valorLetra a la posicion del arreglo donde se encuentra la data.fecha.getFullYear()
       let fecha = new Date(data.fecha);
@@ -56,7 +55,7 @@ export default function GraficoLineal({ dataHistorial, dataMapa, dataHistorialAT
         );
       }
 
-      //   console.log('fecha', fecha);
+      //   // console.log('fecha', fecha);
       let fechaAnioEncontrada = fechaValorLetra.find(
         (fechaAnioBusqueda) => fechaAnioBusqueda.anio === fecha.getFullYear(),
       );
@@ -88,18 +87,6 @@ export default function GraficoLineal({ dataHistorial, dataMapa, dataHistorialAT
       }
     });
 
-    // ordenar de fechaValorLetra.anio el año menor y mayor
-    fechaValorLetra.sort((a, b) => a.anio - b.anio);
-    //obtener el valor de fechaValorLetra[0].anio
-    //  console.log('fechaValorLetra[0].anio', fechaValorLetra[0]?.anio);
-
-    setFechaMinima(new Date(fechaValorLetra[0]?.anio, 0, 1));
-    setFechaMaxima(new Date(fechaValorLetra[fechaValorLetra.length - 1]?.anio, 11, 31));
-    setFechaSeleccionada(new Date(fechaValorLetra[0]?.anio, 0, 1));
-
-    // console.log('fechaValorLetra', fechaValorLetra);
-    setFechasValores(fechaValorLetra);
-
     /////////////////////////////////////////////////////
     dataHistorialATiempo.map((data) => {
       //si la data.fecha.getFullYear() se encuentra en el arreglo fechaValorLetra, entonces sumar data.valorLetra a la posicion del arreglo donde se encuentra la data.fecha.getFullYear()
@@ -114,10 +101,11 @@ export default function GraficoLineal({ dataHistorial, dataMapa, dataHistorialAT
         );
       }
 
-      //   console.log('fecha', fecha);
+      //   // console.log('fecha', fecha);
       let fechaAnioEncontrada = fechaValorLetraATiempo.find(
         (fechaAnioBusqueda) => fechaAnioBusqueda.anio === fecha.getFullYear(),
       );
+
       //obtener el indice de la fecha encontrada
 
       if (fechaAnioEncontrada === undefined) {
@@ -149,24 +137,35 @@ export default function GraficoLineal({ dataHistorial, dataMapa, dataHistorialAT
     });
 
     // ordenar de fechaValorLetra.anio el año menor y mayor
+    fechaValorLetra.sort((a, b) => a.anio - b.anio);
+    //obtener el valor de fechaValorLetra[0].anio
+    // console.log('fechaValorLetra[0].anio', fechaValorLetra[0]?.anio);
+
+    setFechaMinima(new Date(fechaValorLetra[0]?.anio, 0, 1));
+    setFechaMaxima(new Date(fechaValorLetra[fechaValorLetra.length - 1]?.anio, 11, 31));
+    setFechaSeleccionada(new Date(fechaValorLetra[0]?.anio, 0, 1));
+    // ordenar de fechaValorLetra.anio el año menor y mayor
     fechaValorLetraATiempo.sort((a, b) => a.anio - b.anio);
     setFechasValoresATiempo(fechaValorLetraATiempo);
-  }, [dataHistorial]);
+    // console.log('fechaValorLetra', fechaValorLetra);
+    setFechasValores(fechaValorLetra);
+  }, [dataHistorial, dataHistorialATiempo]);
 
   useEffect(() => {
     //segun la fecha seleccionada se debe filtrar del arreglo plantillaMeses cuyo value coincida con la fecha seleccionada
     // y se debe obtener el valor de la propiedad label
-    //  console.log('fechaSeleccionada', fechaSeleccionada.getFullYear());
+    // console.log('fechaSeleccionada', fechaSeleccionada.getFullYear());
 
-    setFechasValoresATiempo(
-      fechasValoresATiempo.map((data) => {
-        data.data.sort((a, b) => a.mes - b.mes);
-        return data;
-      }),
-    );
+    // setFechasValoresATiempo(
+    //   fechasValoresATiempo.map((data) => {
+    //     data.data.sort((a, b) => a.mes - b.mes);
+    //     return data;
+    //   }),
+    // );
     // console.log(
     //   'fechasValoresATiempo',
     //   fechasValoresATiempo.map((data) => {
+    //     console.log('data', data);
     //     data.data.sort((a, b) => a.mes - b.mes);
     //     return data;
     //   }),
@@ -175,7 +174,7 @@ export default function GraficoLineal({ dataHistorial, dataMapa, dataHistorialAT
     let encontrarAnio = fechasValores.find((data) => data.anio === fechaSeleccionada.getFullYear());
     let encontrarAnioATiempo = fechasValoresATiempo.find((data) => data.anio === fechaSeleccionada.getFullYear());
 
-    //   console.log('encontrarAnio', encontrarAnio);
+    // console.log('encontrarAnio', encontrarAnio);
     if (encontrarAnio !== undefined) {
       let _mesSeleccionado = [];
       let _valores = [];
@@ -184,7 +183,7 @@ export default function GraficoLineal({ dataHistorial, dataMapa, dataHistorialAT
       let _mesesATiempo = [];
 
       let dataFechaValor = encontrarAnio.data.sort((a, b) => a.mes - b.mes);
-      //  console.log('dataFechaValor', dataFechaValor);
+      // console.log('dataFechaValor', dataFechaValor);
       dataFechaValor.map((data) => {
         let e = plantillaMeses.find((mes) => mes.value === data.mes);
         _mesSeleccionado.push(e);
@@ -198,14 +197,16 @@ export default function GraficoLineal({ dataHistorial, dataMapa, dataHistorialAT
         _mesesATiempo.push(e.label);
       });
 
-      //  console.log('_valores', _valores);
-      //  console.log('_meses', _meses);
+      // console.log('_valores', _valores);
+      // console.log('_meses', _meses);
+      // console.log('_valoresATiempo', _valoresATiempo);
+      // console.log('_mesesATiempo', _mesesATiempo);
 
       setLineStylesData({
         labels: _meses,
         datasets: [
           {
-            label: 'Crecimiento de Cartera año ' + fechaSeleccionada.getFullYear(),
+            label: 'Crecimiento de Cartera del año ' + fechaSeleccionada.getFullYear(),
             data: _valores,
             fill: true,
             borderColor: '#FF856B',
@@ -213,7 +214,7 @@ export default function GraficoLineal({ dataHistorial, dataMapa, dataHistorialAT
             backgroundColor: 'rgba(255,167,38,0.2)',
           },
           {
-            label: 'Recuperación de Cartera año ' + fechaSeleccionada.getFullYear(),
+            label: 'Recuperación de Cartera del año ' + fechaSeleccionada.getFullYear(),
             data: _valoresATiempo,
             fill: true,
             borderColor: '#66FF3D',
@@ -234,6 +235,15 @@ export default function GraficoLineal({ dataHistorial, dataMapa, dataHistorialAT
       plugins: {
         legend: {
           labels: {
+            color: '#495057',
+          },
+        },
+        title: {
+          display: true,
+          text: 'Avance Histórico de la cartera por año',
+          font: {
+            size: 20,
+            weight: 600,
             color: '#495057',
           },
         },
@@ -268,8 +278,10 @@ export default function GraficoLineal({ dataHistorial, dataMapa, dataHistorialAT
   return (
     <div className="flex w-full justify-content-center p-4 surface-100 border-round-lg border-double border-blue-500">
       <div className="flex-row w-full">
-        <div className="flex flex-row">
-          <div className="font-italic font-semibold flex align-content-center pr-3">Predicción por año</div>
+        <div className="flex flex-row alig">
+          <div className="font-italic font-semibold flex align-items-center align-content-center pr-3">
+            Selección de año a visualizar:
+          </div>
           <Calendar
             id="icon"
             view="year"

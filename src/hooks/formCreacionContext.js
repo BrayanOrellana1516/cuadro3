@@ -394,7 +394,7 @@ function FormCreacionProvider(props) {
         detail: 'La información ya se guardo!',
       });
 
-      console.log("onsubmit formcreacion context");
+      // console.log("onsubmit formcreacion context");
       */
 
       if (codigoProyecto === '') {
@@ -449,7 +449,7 @@ function FormCreacionProvider(props) {
           proyectoEntidadParticipanteDtos: proyectoEntidadParticipanteDtos,
         };
 
-        console.log('onsubmit formcreacion context', datosGeneralesFormulario);
+        // console.log('onsubmit formcreacion context', datosGeneralesFormulario);
 
         enviarProyecto(datosGeneralesFormulario);
         /*.then((response) => {
@@ -517,7 +517,7 @@ function FormCreacionProvider(props) {
         setBanderaDatosGenerales(true);
         setCup(respuesta.nemonicoProyecto);
       }
-      console.log('response', response, response.data.status);
+      // console.log('response', response, response.data.status);
       if (response.status === 200 || response.status === 201) {
         toast.current.show({
           severity: 'success',

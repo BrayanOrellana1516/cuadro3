@@ -28,11 +28,11 @@ export default function GraficoPolar({ dataHistorial, dataMapa }) {
     }
 
     setZonas(_zonas);
-    console.log('zonas', _zonas);
+    // console.log('zonas', _zonas);
 
     //ordenar arreglo de carteraZonas
     ordenar = _carteraZonas.sort((a, b) => a - b);
-    console.log('cartera', ordenar);
+    // console.log('cartera', ordenar);
     setCarteraZonas(ordenar);
 
     // dataHistorial.map((data) => {
@@ -40,7 +40,7 @@ export default function GraficoPolar({ dataHistorial, dataMapa }) {
     //   else if (data.puntuacion > -50 && data.puntuacion <= 30) contadorRiesgoMedio++;
     //   else if (data.puntuacion > 30) contadorRiesgoBajo++;
     // });
-    console.log(contadorRiesgoAlto, contadorRiesgoMedio, contadorRiesgoBajo);
+    // console.log(contadorRiesgoAlto, contadorRiesgoMedio, contadorRiesgoBajo);
     setChartData({
       labels: _zonas,
       datasets: [

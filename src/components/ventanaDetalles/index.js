@@ -21,7 +21,7 @@ export default function VentanaDetalles({ dataHistorial, filtroZona }) {
     //   }),
     // );
     // const titles = historialCrediticion.slice(0, data.indexOf('\n')).split(';');
-    // console.log(csvData);
+    // // console.log(csvData);
     // setDataHistorial(
     //   historialCrediticion
     //     .slice(historialCrediticion.indexOf('\n') + 1)

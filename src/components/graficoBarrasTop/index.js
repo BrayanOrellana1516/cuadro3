@@ -40,14 +40,14 @@ export default function graficoBarrasTop({ dataHistorial, dataMapa }) {
       });
       setZonas(_zonas);
 
-      // console.log('cartera', _carteraZonas);
+      // // console.log('cartera', _carteraZonas);
     }
 
-    // console.log('zonas', _zonas);
+    // // console.log('zonas', _zonas);
 
     //ordenar arreglo de carteraZonas
     // ordenar = _carteraZonas;
-    // console.log('cartera', ordenar);
+    // // console.log('cartera', ordenar);
     setCarteraZonas(ordenar);
 
     // dataHistorial.map((data) => {
@@ -55,12 +55,13 @@ export default function graficoBarrasTop({ dataHistorial, dataMapa }) {
     //   else if (data.puntuacion > -50 && data.puntuacion <= 30) contadorRiesgoMedio++;
     //   else if (data.puntuacion > 30) contadorRiesgoBajo++;
     // });
-    //  console.log(contadorRiesgoAlto, contadorRiesgoMedio, contadorRiesgoBajo);
+    //  // console.log(contadorRiesgoAlto, contadorRiesgoMedio, contadorRiesgoBajo);
+    // Chart.defaults.font = 12;
     setChartData({
       labels: _zonas,
       datasets: [
         {
-          label: 'Top de Zonas con mayor endeudamiento',
+          label: 'Valor de cartera vencida',
           backgroundColor: 'rgba(0, 135, 255)',
           borderColor: 'rgba(255,99,132,1)',
           data: _saldos,
@@ -81,6 +82,15 @@ export default function graficoBarrasTop({ dataHistorial, dataMapa }) {
         legend: {
           labels: {
             fontColor: textColor,
+          },
+        },
+        title: {
+          display: true,
+          text: 'Top de Zonas con mayor endeudamiento',
+          font: {
+            size: 20,
+            weight: 600,
+            color: textColor,
           },
         },
       },
@@ -113,7 +123,7 @@ export default function graficoBarrasTop({ dataHistorial, dataMapa }) {
   }, [dataHistorial]);
 
   return (
-    <div className="card w-full flex justify-content-center surface-200 border-round-lg border-double border-blue-500">
+    <div className=" w-full flex justify-content-center surface-200 border-round-lg border-double border-blue-500">
       <Chart type="bar" data={chartData} options={chartOptions} style={{ width: '100%' }} />
     </div>
   );

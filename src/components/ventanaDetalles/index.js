@@ -3,12 +3,13 @@ import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 import { Fragment, useEffect, useState } from 'react';
 
-export default function VentanaDetalles({ dataHistorial }) {
+export default function VentanaDetalles({ dataHistorial, filtroZona }) {
   const [checked1, setChecked1] = useState(false);
   const [checked2, setChecked2] = useState(false);
   const [fileData, setFileData] = useState();
   const [filters2, setFilters2] = useState({
     nombre: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    zona: { value: null, matchMode: FilterMatchMode.CONTAINS },
   });
 
   useEffect(() => {
@@ -30,11 +31,26 @@ export default function VentanaDetalles({ dataHistorial }) {
     //       return titles.reduce((obj, title, index) => ((obj[title] = values[index]), obj), {});
     //     }),
     // );
-  }, []);
+    if (filtroZona !== null) {
+      setFilters2({
+        nombre: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        zona: { value: filtroZona, matchMode: FilterMatchMode.CONTAINS },
+      });
+    } else {
+      setFilters2({
+        nombre: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        zona: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      });
+    }
+  }, [filtroZona]);
 
   const header = (
-    <div className="table-header">
-      <h3 className="p-m-0">Cartera vencida de la parroquia</h3>
+    <div>
+      {filtroZona !== null ? (
+        <h3 className="pl-2">Cartera vencida de la parroquia {filtroZona}</h3>
+      ) : (
+        <h3 className="pl-2">Cartera vencida de todas las parroquias</h3>
+      )}
     </div>
   );
 

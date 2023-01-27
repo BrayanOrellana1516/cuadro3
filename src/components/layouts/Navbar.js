@@ -73,7 +73,7 @@ export default function Navbar(props) {
 
       <i className="p-toolbar-separator" />
       <div className="flex flex-column estiloSNP">
-        <div className="font-medium text-50">Sistema Integrado de Planificación e Inversión Pública</div>
+        <div className="font-medium text-50">CUADRO DE MANDO DEL ALMACEN UNICOMERCIO</div>
       </div>
     </Fragment>
   );

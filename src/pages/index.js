@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import { Button } from 'primereact/button';
 import { Knob } from 'primereact/knob';
 import { useEffect, useState } from 'react';
 
@@ -22,7 +23,7 @@ const DEFAULT_CENTER = [-2.002265, -79.485339];
 export default function Home() {
   const [dataHistorial, setDataHistorial] = useState([]);
   const [dataHistorialATiempo, setDataHistorialATiempo] = useState([]);
-
+  const [filtroZona, setFiltroZona] = useState(null);
   const [dataMapa, setDataMapa] = useState([]);
   const csvFilePath = '../components/common/historial_crediticio2.csv';
   const csv = require('csvtojson');
@@ -141,8 +142,8 @@ export default function Home() {
     );
   }, []);
 
-  const getSelecction = () => {
-    console.log('press');
+  const getSelecction = (zona) => {
+    console.log(zona);
   };
 
   const calcularPorcentaje = (valor) => {
@@ -175,19 +176,33 @@ export default function Home() {
             />
           </div> */}
           <div className="flex flex-colum w-full">
-            <div className=" w-5 h-25rem p-4 m-2 surface-200  border-round-lg border-double border-blue-500">
-              <Map className={styles.homeMap} center={DEFAULT_CENTER} zoom={15} onMouseEnter={(e) => getSelecction()}>
+            <div className=" w-5 h-25rem p-2 m-2 surface-200  border-round-lg border-double border-blue-500">
+              <Button
+                label="Limpiar Selección"
+                autoFocus
+                z-index="1000"
+                position="relative"
+                className="p-button-raised p-button-rounded estiloSNP h-2rem"
+                onClick={() => {
+                  setFiltroZona(null);
+                }}
+              />
+              <Map
+                position="absolute"
+                className={styles.homeMap}
+                center={DEFAULT_CENTER}
+                zoom={15}
+                onMouseEnter={(e) => getSelecction()}
+              >
                 {({ TileLayer, Marker, Popup, Polygon }) => (
                   <>
                     <TileLayer
                       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                       attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                     />
-                    <Marker position={DEFAULT_CENTER}>
-                      <Popup>
-                        A pretty CSS3 popup. <br /> Easily customizable.
-                      </Popup>
-                    </Marker>
+
+                    {/* //renderizar boton delante del data */}
+
                     {dataMapa !== ''
                       ? dataMapa.map((features) =>
                           features.geometry.type === 'Polygon'
@@ -197,16 +212,6 @@ export default function Home() {
                                   key={features.properties.name}
                                   positions={coordinates}
                                   pathOptions={getColor(features.properties.gdp_md_est)}
-                                  onClick={(event) => {
-                                    console.log(event);
-                                  }}
-                                  onMouseEnter={(e) => console.log('ddddd')}
-                                  onMouseLeave={(e) => console.log('ddddd')}
-                                  //LLamar a funcion getSelecction y enviar feactures
-
-                                  onMouseut={(e) => console.log(e)}
-
-                                  // style={getColor}
                                 >
                                   <Popup>
                                     <div className="flex flex-row">
@@ -232,7 +237,13 @@ export default function Home() {
                                       <div className="flex pl-3 flex-column">
                                         <h4 className="flex pt-5">{features.properties.name} : </h4>${' '}
                                         {features.properties.gdp_md_est}
-                                        {getSelecction()}
+                                        <Button
+                                          label="Ver Detalles"
+                                          className="p-button-raised p-button-rounded mt-4 estiloSNP"
+                                          onClick={() => {
+                                            setFiltroZona(features.properties.name);
+                                          }}
+                                        />
                                       </div>
                                     </div>
                                   </Popup>
@@ -253,7 +264,7 @@ export default function Home() {
             </div>
             <div className="w-7 p-1">
               <div className="flex flex-column w-full border-cyan-800">
-                <VentanaDetalles dataHistorial={dataHistorial} />
+                <VentanaDetalles dataHistorial={dataHistorial} filtroZona={filtroZona} />
                 <div className="flex flex-row h-full pt-5">
                   <div className=" w-6 h-5rem pr-1 border-blue-300">
                     <GraficoBarras

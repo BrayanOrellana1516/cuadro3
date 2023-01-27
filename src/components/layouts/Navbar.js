@@ -61,15 +61,15 @@ export default function Navbar(props) {
 
   const rightContents = (
     <Fragment>
-      <div className="flex flex-column justify-content-center">
-        <div className="p-fluid flex align-items-end">
+      <div className="flex flex-column justify-content-center surface-border">
+        <div className="p-fluid flex align-items-end surface-border ">
           <Button
-            className="estiloSNP"
+            className="estiloSNP surface-border "
             onClick={(e) => user.current.toggle(e)}
             aria-haspopup
             aria-controls="overlay_panel"
           >
-            <i className="pi pi-fw pi-user p-overlay-badge" style={{ fontSize: '1.5rem' }}></i>
+            <i className="pi pi-fw pi-user p-overlay-badge surface-border " style={{ fontSize: '1.5rem' }}></i>
           </Button>
         </div>
 

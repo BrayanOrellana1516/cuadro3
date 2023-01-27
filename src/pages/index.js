@@ -155,26 +155,11 @@ export default function Home() {
       <Head>
         <title>Cuadro de Mandos</title>
       </Head>
-      <div className="flex flex-column w-full bg-yellow-50 border-blue-100">
+      <div className="flex flex-column w-full border-blue-100 bg-yellow-100">
         <div className=" flex-row w-full">
           <Navbar />
         </div>
         <div className=" mt-4 flex-row border-blue-100">
-          {/* <div className="flex flex-row w-full justify-content-center py-3 ">
-      
-
-            <div className="font-italic font-semibold flex align-content-center pr-3">Predicción por año</div>
-            <Calendar
-              id="icon"
-              view="year"
-              dateFormat="yy"
-              minDate={new Date(2023, 0, 1)}
-              maxDate={new Date(2025, 11, 31)}
-              value={fechaSeleccionada}
-              onChange={(e) => setFechaSeleccionada(e.value)}
-              showIcon
-            />
-          </div> */}
           <div className="flex flex-colum w-full">
             <div className=" w-5 h-25rem p-2 m-2 surface-200  border-round-lg border-double border-blue-500">
               <Button

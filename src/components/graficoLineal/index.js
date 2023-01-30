@@ -276,7 +276,7 @@ export default function GraficoLineal({ dataHistorial, dataMapa, dataHistorialAT
   const { basicOptions } = getLightTheme();
 
   return (
-    <div className="flex w-full justify-content-center p-4 surface-100 border-round-lg border-double border-blue-500">
+    <div className="flex w-full justify-content-center p-4 surface-100 border-round-lg border-double border-blue-900">
       <div className="flex-row w-full">
         <div className="flex flex-row alig">
           <div className="font-italic font-semibold flex align-items-center align-content-center pr-3">

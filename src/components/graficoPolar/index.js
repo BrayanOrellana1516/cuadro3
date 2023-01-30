@@ -92,7 +92,7 @@ export default function GraficoPolar({ dataHistorial, dataMapa }) {
     },
   });
   return (
-    <div className="card flex justify-content-center surface-100 border-round-lg border-double border-blue-500">
+    <div className="card flex justify-content-center surface-100 border-round-lg border-double border-blue-900">
       <Chart type="polarArea" data={chartData} options={lightOptions} style={{ width: '100%' }} />
     </div>
   );

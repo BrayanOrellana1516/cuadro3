@@ -77,7 +77,7 @@ export default function graficoBarrasTop({ dataHistorial, dataMapa }) {
     const options = {
       indexAxis: 'y',
       maintainAspectRatio: false,
-      aspectRatio: 0.9,
+      aspectRatio: 0.8,
       plugins: {
         legend: {
           labels: {
@@ -123,7 +123,7 @@ export default function graficoBarrasTop({ dataHistorial, dataMapa }) {
   }, [dataHistorial]);
 
   return (
-    <div className=" w-full flex justify-content-center surface-200 border-round-lg border-double border-blue-500">
+    <div className=" w-12 flex justify-content-center surface-200 border-round-lg border-double border-blue-900">
       <Chart type="bar" data={chartData} options={chartOptions} style={{ width: '100%' }} />
     </div>
   );

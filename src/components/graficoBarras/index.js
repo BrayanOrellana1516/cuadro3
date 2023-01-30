@@ -90,7 +90,7 @@ export default function GraficoBarras({ dataHistorial, dataMapa }) {
     },
   });
   return (
-    <div className="card flex justify-content-center surface-200 border-round-lg border-double border-blue-500">
+    <div className="card flex justify-content-center surface-200 border-round-lg border-double border-blue-900 surface-overlay">
       <Chart type="radar" data={chartData} options={lightOptions} style={{ width: '100%' }} />
     </div>
   );

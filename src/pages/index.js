@@ -155,13 +155,13 @@ export default function Home() {
       <Head>
         <title>Cuadro de Mandos</title>
       </Head>
-      <div className="flex flex-column w-full border-blue-100 bg-yellow-100">
+      <div className="flex flex-column w-full border-blue-900 bg-blue-400">
         <div className=" flex-row w-full">
           <Navbar />
         </div>
-        <div className=" mt-4 flex-row border-blue-100">
+        <div className=" mt-4 flex-row border-blue-900">
           <div className="flex flex-colum w-full">
-            <div className=" w-5 h-25rem p-2 m-2 surface-200  border-round-lg border-double border-blue-500">
+            <div className=" w-5 h-25rem p-2 m-2 surface-200  border-round-lg border-double border-blue-900">
               <Button
                 label="Limpiar Selección"
                 autoFocus
@@ -185,8 +185,6 @@ export default function Home() {
                       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                       attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                     />
-
-                    {/* //renderizar boton delante del data */}
 
                     {dataMapa !== ''
                       ? dataMapa.map((features) =>

@@ -6,8 +6,8 @@ import { useEffect, useState } from 'react';
 import historialCrediticio from '@components/common/csvjson.json';
 import GraficoBarras from '@components/graficoBarras';
 import GraficoBarrasTop from '@components/graficoBarrasTop';
+import GraficoBarrasVerticales from '@components/graficoBarrasVerticales';
 import GraficoLineal from '@components/graficoLineal';
-import GraficoPolar from '@components/graficoPolar';
 import Navbar from '@components/layouts/Navbar';
 import Map from '@components/map';
 import VentanaDetalles from '@components/ventanaDetalles';
@@ -239,10 +239,11 @@ export default function Home() {
                 )}
               </Map>
 
-              <GraficoBarrasTop
+              <GraficoBarrasVerticales
                 className="flex w-5 border-cyan-800"
                 dataHistorial={dataHistorial}
                 dataMapa={dataMapa}
+                filtroZona={filtroZona}
               />
             </div>
             <div className="w-7 p-1">
@@ -257,7 +258,11 @@ export default function Home() {
                     />
                   </div>
                   <div className="w-6">
-                    <GraficoPolar className="w-full h-full" dataHistorial={dataHistorial} dataMapa={dataMapa} />
+                    <GraficoBarrasTop
+                      className="flex w-5 border-cyan-800"
+                      dataHistorial={dataHistorial}
+                      dataMapa={dataMapa}
+                    />
                   </div>
                 </div>
               </div>

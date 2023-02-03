@@ -6,17 +6,9 @@ import 'primereact/resources/themes/lara-light-indigo/theme.css';
 import { useEffect, useState } from 'react';
 
 export default function graficoBarrasTop({ dataHistorial, dataMapa }) {
-  const [checked1, setChecked1] = useState(false);
-  const [checked2, setChecked2] = useState(false);
-  const [carteraZonas, setCarteraZonas] = useState([]);
-  let ordenar;
-  const [zonas, setZonas] = useState([]);
   const [chartData, setChartData] = useState({});
   const [chartOptions, setChartOptions] = useState({});
   useEffect(() => {
-    let contadorRiesgoBajo = 0;
-    let contadorRiesgoMedio = 0;
-    let contadorRiesgoAlto = 0;
     let _carteraZonas = [];
     let _zonas = [];
     let _saldos = [];
@@ -28,6 +20,7 @@ export default function graficoBarrasTop({ dataHistorial, dataMapa }) {
         // _carteraZonas.push(features.properties.gdp_md_est);
         // _zonas.push(features.properties.name);
       });
+
       // capturar las 3 cartera por zonas mas altas y sus nombres
       _carteraZonas.sort(function (a, b) {
         return b.gdp_md_est - a.gdp_md_est;
@@ -38,9 +31,16 @@ export default function graficoBarrasTop({ dataHistorial, dataMapa }) {
         _zonas.push(cartera.name);
         _saldos.push(cartera.gdp_md_est);
       });
-      setZonas(_zonas);
-
-      // // console.log('cartera', _carteraZonas);
+      let _saldos2 = [];
+      _saldos.forEach((element) => {
+        //si element es array retorna el primer elemento del array convirtiendo a element en un string
+        if (Array.isArray(element)) {
+          _saldos2.push(element[0].toFixed(2));
+        }
+      });
+      if (_saldos2.length > 0) {
+        _saldos = _saldos2;
+      }
     }
 
     // // console.log('zonas', _zonas);
@@ -48,7 +48,6 @@ export default function graficoBarrasTop({ dataHistorial, dataMapa }) {
     //ordenar arreglo de carteraZonas
     // ordenar = _carteraZonas;
     // // console.log('cartera', ordenar);
-    setCarteraZonas(ordenar);
 
     // dataHistorial.map((data) => {
     //   if (data.puntuacion <= -50) contadorRiesgoAlto++;
@@ -120,7 +119,7 @@ export default function graficoBarrasTop({ dataHistorial, dataMapa }) {
     };
 
     setChartOptions(options);
-  }, [dataHistorial]);
+  }, [dataMapa]);
 
   return (
     <div className=" w-12 flex justify-content-center surface-200 border-round-lg border-double border-blue-900">

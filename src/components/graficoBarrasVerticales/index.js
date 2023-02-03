@@ -124,6 +124,11 @@ export default function graficoBarrasVerticales({ dataHistorial, dataMapa, filtr
         return Object.keys(obj.letra);
       })[0];
       console.log('letrasFilter', letrasFilter);
+      // añadir a cada elemento del arreglo letrasFilter la cadena " Letra/as"
+      letrasFilter = letrasFilter?.map((obj) => {
+        return obj + ' Letra/as';
+      });
+
       cantidadFilter = dataZonaLetras.map((obj) => {
         return Object.values(obj.letra);
       })[0];
@@ -168,7 +173,7 @@ export default function graficoBarrasVerticales({ dataHistorial, dataMapa, filtr
         },
         title: {
           display: true,
-          text: 'Numero de letras vencidas en ' + filtroZona,
+          text: 'Número de letras vencidas en ' + filtroZona,
           font: {
             size: 20,
             weight: 600,

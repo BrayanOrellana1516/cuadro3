@@ -14,6 +14,7 @@ export default function GraficoBarras({ dataHistorial, dataMapa }) {
   const [chartData, setChartData] = useState({});
 
   useEffect(() => {
+    console.log('edataMapa', dataMapa);
     let contadorRiesgoBajo = 0;
     let contadorRiesgoMedio = 0;
     let contadorRiesgoAlto = 0;
@@ -22,7 +23,7 @@ export default function GraficoBarras({ dataHistorial, dataMapa }) {
 
     if (dataMapa !== '') {
       dataMapa.map((features) => {
-        _carteraZonas.push(features.properties.gdp_md_est);
+        _carteraZonas.push(parseFloat(features.properties.gdp_md_est).toFixed(2));
         _zonas.push(features.properties.name);
       });
     }
@@ -56,7 +57,7 @@ export default function GraficoBarras({ dataHistorial, dataMapa }) {
         },
       ],
     });
-  }, [dataHistorial]);
+  }, [dataMapa]);
 
   const [lightOptions] = useState({
     plugins: {
@@ -67,7 +68,7 @@ export default function GraficoBarras({ dataHistorial, dataMapa }) {
       },
       title: {
         display: true,
-        text: 'Radar de Cartera Vencida',
+        text: 'Radar de Cartera Vencida de Zonas',
         font: {
           size: 20,
           weight: 600,

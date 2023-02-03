@@ -128,6 +128,16 @@ div.p-toolbar.p-component.toolbarSNP {
 div.p-sidebar {
   background: #212a5c !important;
 }
+.p-togglebutton.p-button.p-highlight {
+  background: #212a5c;
+  border-color: #212a5c;
+  color: #ffffff;
+}
+.p-togglebutton.p-button.p-highlight:hover {
+  background: #212a5c;
+  color: #ffffff;
+  border-color: #212a5c;
+}
 
 /*
 .p-inputnumber-input{

@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import { Button } from 'primereact/button';
 import { Knob } from 'primereact/knob';
+import { ToggleButton } from 'primereact/togglebutton';
 import { useEffect, useState } from 'react';
 
 import historialCrediticio from '@components/common/csvjson.json';
@@ -11,6 +12,7 @@ import GraficoLineal from '@components/graficoLineal';
 import Navbar from '@components/layouts/Navbar';
 import Map from '@components/map';
 import VentanaDetalles from '@components/ventanaDetalles';
+import * as tf from '@tensorflow/tfjs';
 
 import Ubicaciones from '../parroquias/ubicaciones.json';
 import styles from '../styles/Home.module.css';
@@ -25,15 +27,14 @@ export default function Home() {
   const [dataHistorialATiempo, setDataHistorialATiempo] = useState([]);
   const [filtroZona, setFiltroZona] = useState(null);
   const [dataMapa, setDataMapa] = useState([]);
+  const [activarPrediccion, setActivarPrediccion] = useState(false);
+  const [dataMapaPrediccion, setDataMapaPrediccion] = useState([]);
   const csvFilePath = '../components/common/historial_crediticio2.csv';
   const csv = require('csvtojson');
-  const [fechaSeleccionada, setFechaSeleccionada] = useState(new Date());
-  const handleDataScopeChange = (event) => {
-    // console.log(event);
-  };
   const [totalCartera, setTotalCartera] = useState(0);
+  let filtroHistorialCrediticio;
   const getColor = (sizePortfolio) => {
-    let renderColor = { color: '#f6081b', value: 5100 };
+    let renderColor = { color: '#ffffff', value: 5100 };
 
     purpleOptions.forEach((element) => {
       if (sizePortfolio > element.value) {
@@ -44,9 +45,7 @@ export default function Home() {
     return renderColor;
   };
   const purpleOptions = [
-    { color: '#fffddd', value: 5000 },
-    { color: '#faf3c8', value: 13000 },
-    { color: '#f6e8b3', value: 26000 },
+    { color: '#f6e8b3', value: 5000 },
     { color: '#f4dd9f', value: 39000 },
     { color: '#f3d18b', value: 41000 },
     { color: '#f2c578', value: 44000 },
@@ -61,14 +60,65 @@ export default function Home() {
     { color: '#f6081b', value: 110000 },
   ];
 
+  const parroquias = [
+    ['CENTRO', 0],
+    ['LAS MALVINAS', 0],
+    ['EL MANGO', 0],
+    ['MIRAFLORES', 0],
+    ['EL PARAISO', 0],
+    ['MIRAFLORES 2', 0],
+    ['EL CAUJER', 0],
+    ['PRIMAVERA 2', 0],
+    ['DOCE DE OCTUBRE', 0],
+    ['BELLAVISTA', 0],
+    ['MANUELITA SAENZ', 0],
+    ['LAURELES 2', 0],
+    ['SAN PEDRO DE VENECIA', 0],
+    ['SAN MIGUEL ARCANGEL', 0],
+    ['LAURELES 1', 0],
+    ['TRES DE SEPTIEMBRE', 0],
+    ['LAS PALMAS', 0],
+    ['SAN JACINTO', 0],
+  ];
+
+  const predictNextValues = async (data) => {
+    // Convertir los datos a un tensor
+    const dataTensor = tf.tensor1d(data, 'float32');
+
+    // Normalizar los datos
+    const mean = tf.mean(dataTensor).dataSync()[0];
+    const std = tf.moments(dataTensor, 0).variance.sqrt().dataSync()[0];
+    const normData = dataTensor.sub(mean).div(std);
+
+    // Definir el modelo
+    const model = tf.sequential();
+    model.add(tf.layers.dense({ units: 1, inputShape: [1], dtype: 'float32' }));
+
+    // Compilar el modelo
+    model.compile({ loss: 'meanSquaredError', optimizer: 'sgd' });
+
+    // Entrenar el modelo con los datos
+    await model.fit(normData, normData, { epochs: 100 });
+
+    // Hacer una predicción para los próximos valores
+    const predictionTensor = model.predict(normData);
+
+    // Desnormalizar la predicción
+    const unNormPrediction = predictionTensor.mul(std).add(mean);
+
+    // Convertir el tensor de predicción a un arreglo y devolverlo
+    return unNormPrediction.arraySync();
+  };
+
   useEffect(() => {
     // console.log('historialCrediticio', historialCrediticio);
-    let filtroHistorialCrediticio = historialCrediticio.filter((registro) => {
+    filtroHistorialCrediticio = historialCrediticio.filter((registro) => {
       return (
         registro.estado === 'ATRASO' &&
         !isNaN(registro.cedula) &&
         registro.nombre !== 'BURGOS BARRES CHISTER' &&
-        registro.nombre !== 'CAICEDO BAYAS MARIA CRISTINA'
+        registro.nombre !== 'CAICEDO BAYAS MARIA CRISTINA' &&
+        registro.letra !== 'ENTRADA'
       );
     });
 
@@ -77,31 +127,11 @@ export default function Home() {
         registro.estado === 'A TIEMPO' &&
         !isNaN(registro.cedula) &&
         registro.nombre !== 'BURGOS BARRES CHISTER' &&
-        registro.nombre !== 'CAICEDO BAYAS MARIA CRISTINA'
+        registro.nombre !== 'CAICEDO BAYAS MARIA CRISTINA' &&
+        registro.letra !== 'ENTRADA'
       );
     });
     // console.log('filtroHistorialCrediticioATiempo', filtroHistorialCrediticioATiempo);
-
-    const parroquias = [
-      ['CENTRO', 0],
-      ['LAS MALVINAS', 0],
-      ['EL MANGO', 0],
-      ['MIRAFLORES', 0],
-      ['EL PARAISO', 0],
-      ['MIRAFLORES 2', 0],
-      ['EL CAUJER', 0],
-      ['PRIMAVERA 2', 0],
-      ['DOCE DE OCTUBRE', 0],
-      ['BELLAVISTA', 0],
-      ['MANUELITA SAENZ', 0],
-      ['LAURELES 2', 0],
-      ['SAN PEDRO DE VENECIA', 0],
-      ['SAN MIGUEL ARCANGEL', 0],
-      ['LAURELES 1', 0],
-      ['TRES DE SEPTIEMBRE', 0],
-      ['LAS PALMAS', 0],
-      ['SAN JACINTO', 0],
-    ];
 
     // recorrer filtroHistorialCrediticio ,sumar interes_letra y valorLetra que coincidan con zona
     let _totalCartera = 0;
@@ -140,11 +170,90 @@ export default function Home() {
         return item;
       }),
     );
+
+    ///////////prediccion/////////////
+    let data = [];
+    dataMapa.map((item) => {
+      data.push(parseInt(item.properties.gdp_md_est));
+    });
+    predictNextValues(data).then(async (result) => {
+      console.log('result', result);
+      setDataMapaPrediccion(
+        dataMapa.map((item, index) => {
+          item.properties.gdp_md_est = result[index];
+          return item;
+        }),
+      );
+    });
   }, []);
 
-  const getSelecction = (zona) => {
-    // console.log(zona);
-  };
+  useEffect(() => {
+    if (activarPrediccion === true) {
+      let data = [];
+      dataMapa.map((item) => {
+        data.push(parseInt(item.properties.gdp_md_est));
+      });
+      console.log('Ubicacionesact', Ubicaciones);
+      console.log('data', data);
+      //modificar el ultimo registro de data
+
+      predictNextValues(data).then(async (result) => {
+        console.log('result', result);
+        setDataMapa(
+          dataMapa.map((item, index) => {
+            item.properties.gdp_md_est = result[index];
+            return item;
+          }),
+        );
+      });
+      // setDataMapaPrediccion(dataMapaPrediccion);
+    } else {
+      let ubicaciones = Ubicaciones;
+      console.log('historialCrediticio', historialCrediticio);
+
+      let _totalCartera = 0;
+      let filtroHistorialCrediticioo = historialCrediticio.filter((registro) => {
+        return (
+          registro.estado === 'ATRASO' &&
+          !isNaN(registro.cedula) &&
+          registro.nombre !== 'BURGOS BARRES CHISTER' &&
+          registro.nombre !== 'CAICEDO BAYAS MARIA CRISTINA' &&
+          registro.letra !== 'ENTRADA'
+        );
+      });
+
+      filtroHistorialCrediticioo = filtroHistorialCrediticioo?.map((item) => {
+        // si item.zona se encuentra en parroquias entonces sumar interes_letra y valorLetra y asignar a parroquias
+        parroquias.forEach((parroquia) => {
+          if (item.zona === parroquia[0]) {
+            parroquia[1] =
+              parroquia[1] +
+              parseFloat(item.interes_letra.toString().replace(',', '.')) +
+              parseFloat(item.valorLetra.toString().replace(',', '.'));
+            _totalCartera =
+              _totalCartera +
+              parseFloat(item.interes_letra.toString().replace(',', '.')) +
+              parseFloat(item.valorLetra.toString().replace(',', '.'));
+          }
+        });
+        return item;
+      });
+      console.log('filtroHistorialCrediticio', filtroHistorialCrediticio);
+
+      setDataMapa(
+        ubicaciones.features.map((item) => {
+          //si item.properties.name se encuentra en parroquias entonces insertar en item.properties.gdp_md_est el segundo valor de parroquias
+          parroquias.forEach((parroquia) => {
+            if (item.properties.name === parroquia[0]) {
+              console.log('parroquia[1]', parroquia[1]);
+              item.properties.gdp_md_est = parroquia[1].toFixed(2);
+            }
+          });
+          return item;
+        }),
+      );
+    }
+  }, [activarPrediccion]);
 
   const calcularPorcentaje = (valor) => {
     return (valor * 100) / totalCartera;
@@ -162,30 +271,41 @@ export default function Home() {
         <div className=" mt-4 flex-row border-blue-900">
           <div className="flex flex-colum w-full">
             <div className=" w-5 h-25rem p-2 m-2 surface-200  border-round-lg border-double border-blue-900">
-              <Button
-                label="Limpiar Selección"
-                autoFocus
-                z-index="1000"
-                position="relative"
-                className="p-button-raised p-button-rounded estiloSNP h-2rem"
-                onClick={() => {
-                  setFiltroZona(null);
-                }}
-              />
-              <Map
-                position="absolute"
-                className={styles.homeMap}
-                center={DEFAULT_CENTER}
-                zoom={15}
-                onMouseEnter={(e) => getSelecction()}
-              >
+              <div className="flex flex-row w-full">
+                <Button
+                  label="Limpiar Selección"
+                  autoFocus
+                  z-index="1000"
+                  position="relative"
+                  className="p-button-raised p-button-rounded estiloSNP h-2rem"
+                  onClick={() => {
+                    setFiltroZona(null);
+                  }}
+                />
+                <div
+                  className="flex ml-8
+                 font-bold text-l align-items-center justify-content-center font-italic underline
+                "
+                >
+                  <p>Activar Predicción</p>
+                </div>
+                <ToggleButton
+                  offLabel="Off"
+                  onLabel="On"
+                  offIcon="pi pi-times"
+                  onIcon="pi pi-check"
+                  className="h-2rem mb-2"
+                  checked={activarPrediccion}
+                  onChange={(e) => setActivarPrediccion(e.value)}
+                />
+              </div>
+              <Map position="absolute" className={styles.homeMap} center={DEFAULT_CENTER} zoom={15}>
                 {({ TileLayer, Marker, Popup, Polygon }) => (
                   <>
                     <TileLayer
                       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                       attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                     />
-
                     {dataMapa !== ''
                       ? dataMapa.map((features) =>
                           features.geometry.type === 'Polygon'
@@ -219,7 +339,7 @@ export default function Home() {
                                       </div>
                                       <div className="flex pl-3 flex-column">
                                         <h4 className="flex pt-5">{features.properties.name} : </h4>${' '}
-                                        {features.properties.gdp_md_est}
+                                        {parseFloat(features.properties.gdp_md_est).toFixed(2)}
                                         <Button
                                           label="Ver Detalles"
                                           className="p-button-raised p-button-rounded mt-4 estiloSNP"

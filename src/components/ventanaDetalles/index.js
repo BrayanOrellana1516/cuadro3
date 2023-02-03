@@ -1,6 +1,8 @@
 import { FilterMatchMode } from 'primereact/api';
 import { Column } from 'primereact/column';
+import { ColumnGroup } from 'primereact/columngroup';
 import { DataTable } from 'primereact/datatable';
+import { Row } from 'primereact/row';
 import { Fragment, useEffect, useState } from 'react';
 
 export default function VentanaDetalles({ dataHistorial, filtroZona }) {
@@ -54,21 +56,21 @@ export default function VentanaDetalles({ dataHistorial, filtroZona }) {
     </div>
   );
 
-  const statusBodyTemplate = (rowData) => {
-    if (rowData.puntuacion <= -50) {
-      return <span className={`product-badge status-alto`}>{rowData.puntuacion}</span>;
-    } else {
-      // crear un if donde la variable rowData.puntuacion este entre 10 y 30
+  // const statusBodyTemplate = (rowData) => {
+  //   if (rowData.puntuacion <= -50) {
+  //     return <span className={`product-badge status-alto`}>{rowData.puntuacion}</span>;
+  //   } else {
+  //     // crear un if donde la variable rowData.puntuacion este entre 10 y 30
 
-      if (rowData.puntuacion > -50 && rowData.puntuacion <= 30) {
-        return <span className={`product-badge status-medio`}>{rowData.puntuacion}</span>;
-      } else {
-        if (rowData.puntuacion > 30) {
-          return <span className={`product-badge status-bajo`}>{rowData.puntuacion}</span>;
-        }
-      }
-    }
-  };
+  //     if (rowData.puntuacion > -50 && rowData.puntuacion <= 30) {
+  //       return <span className={`product-badge status-medio`}>{rowData.puntuacion}</span>;
+  //     } else {
+  //       if (rowData.puntuacion > 30) {
+  //         return <span className={`product-badge status-bajo`}>{rowData.puntuacion}</span>;
+  //       }
+  //     }
+  //   }
+  // };
 
   const formatCurrency = (rowData) => {
     return parseFloat(rowData.valorLetra.toString().replace(',', '.')).toLocaleString('en-US', {
@@ -94,6 +96,52 @@ export default function VentanaDetalles({ dataHistorial, filtroZona }) {
       </Fragment>
     );
   };
+
+  /**
+   * @function
+   * @name sumTotal
+   * @description sumTotal
+   * @returns Suma total de los datos de la tabla
+   */
+  function sumTotal() {
+    let total = 0;
+
+    //volver a recorrer el arreglo de dataHistorial pero tomando en cuenta el filtro de zona
+    if (filtroZona !== null) {
+      for (let financ of dataHistorial) {
+        if (financ.zona === filtroZona) {
+          total += parseFloat(financ.valorLetra.toString().replace(',', '.'));
+          total += parseFloat(financ.interes_letra.toString().replace(',', '.'));
+        }
+      }
+    } else {
+      for (let financ of dataHistorial) {
+        total += parseFloat(financ.valorLetra.toString().replace(',', '.'));
+        total += parseFloat(financ.interes_letra.toString().replace(',', '.'));
+      }
+    }
+    return total.toLocaleString('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      maximumFractionDigits: 2,
+      minimumFractionDigits: 2,
+    });
+  }
+
+  /**
+   * @constant
+   * @name footerSuma
+   * @returns footer de la tabla
+   */
+  let footerSuma = (
+    <ColumnGroup>
+      <Row>
+        <Column footer="Total: " colSpan={6} footerStyle={{ textAlign: 'right' }} />
+        <Column footer={sumTotal} colSpan={2} footerStyle={{ textAlign: 'left' }} />
+      </Row>
+    </ColumnGroup>
+  );
+
   return (
     <div className="datatable-templating-demo ">
       <div className="card py-4 px-2 surface-200 border-round-lg border-double border-blue-900">
@@ -120,6 +168,7 @@ export default function VentanaDetalles({ dataHistorial, filtroZona }) {
           size="small"
           filterDisplay="row"
           filters={filters2}
+          footerColumnGroup={footerSuma}
           globalFilterFields={['nombre']}
           //setear el tamaño del filter
         >
@@ -133,7 +182,7 @@ export default function VentanaDetalles({ dataHistorial, filtroZona }) {
             showFilterMatchModes={false}
             showFilterMenu={false}
           ></Column>
-          <Column field="tipoDocumento" header="Tipo de Documento"></Column>
+          {/* <Column field="tipoDocumento" header="Tipo de Documento"></Column> */}
           <Column field="numeroDocumento" header="Número de Documento"></Column>
           {/* <Column field="porfolioVencido" header="Deuda Inicial" body={formatCurrency}></Column> */}
           <Column field="letra" header="Letra Deuda"></Column>
@@ -141,7 +190,7 @@ export default function VentanaDetalles({ dataHistorial, filtroZona }) {
           <Column field="plazoLetra" header="Vencimiento de Letra"></Column>
           <Column field="interes_letra" header="Interes Letra" body={formatCurrencyInteres}></Column>
           <Column field="estado" header="Estado"></Column>
-          <Column field="puntuacion" header="Score" body={statusBodyTemplate}></Column>
+          {/* <Column field="puntuacion" header="Score" body={statusBodyTemplate}></Column> */}
         </DataTable>
       </div>
     </div>

@@ -164,7 +164,7 @@ export default function graficoBarrasVerticales({ dataHistorial, dataMapa, filtr
     const options = {
       indexAxis: 'x',
       maintainAspectRatio: false,
-      aspectRatio: 0.8,
+      aspectRatio: 1,
       plugins: {
         legend: {
           labels: {

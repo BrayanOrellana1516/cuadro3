@@ -75,8 +75,13 @@ export default function graficoBarrasTop({ dataHistorial, dataMapa }) {
 
     const options = {
       indexAxis: 'y',
+
       maintainAspectRatio: false,
-      aspectRatio: 0.8,
+      aspectRatio: 1,
+      barThickness: 20,
+      maxBarThickness: 80,
+      //distancia entre barras
+
       plugins: {
         legend: {
           labels: {
@@ -85,10 +90,10 @@ export default function graficoBarrasTop({ dataHistorial, dataMapa }) {
         },
         title: {
           display: true,
-          text: 'Top de Zonas con mayor endeudamiento',
+          text: 'Zonas con mayor endeudamiento',
           font: {
-            size: 20,
-            weight: 600,
+            size: 15,
+            weight: 700,
             color: textColor,
           },
         },
@@ -97,13 +102,15 @@ export default function graficoBarrasTop({ dataHistorial, dataMapa }) {
         x: {
           ticks: {
             color: textColorSecondary,
+            //separacion de los numeros en el eje x
+            stepSize: 150000,
             font: {
-              weight: 400,
+              weight: 600,
             },
           },
           grid: {
-            display: false,
-            drawBorder: false,
+            display: true,
+            drawBorder: true,
           },
         },
         y: {
@@ -122,7 +129,7 @@ export default function graficoBarrasTop({ dataHistorial, dataMapa }) {
   }, [dataMapa]);
 
   return (
-    <div className=" w-12 flex justify-content-center surface-200 border-round-lg border-double border-blue-900">
+    <div className="flex justify-content-center surface-200 border-round-lg border-double border-blue-900">
       <Chart type="bar" data={chartData} options={chartOptions} style={{ width: '100%' }} />
     </div>
   );

@@ -68,7 +68,7 @@ export default function GraficoBarras({ dataHistorial, dataMapa }) {
       },
       title: {
         display: true,
-        text: 'Radar de Cartera Vencida de Zonas',
+        text: 'Radar de cartera vencida por Zonas',
         font: {
           size: 20,
           weight: 600,

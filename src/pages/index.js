@@ -159,11 +159,13 @@ export default function Home() {
     setDataHistorial(filtroHistorialCrediticio);
     setDataHistorialATiempo(filtroHistorialCrediticioATiempo);
     // console.log('Ubicaciones', Ubicaciones.features);
+    let ubicaciones = Ubicaciones;
     setDataMapa(
-      Ubicaciones.features.map((item) => {
+      ubicaciones.features.map((item) => {
         //si item.properties.name se encuentra en parroquias entonces insertar en item.properties.gdp_md_est el segundo valor de parroquias
         parroquias.forEach((parroquia) => {
           if (item.properties.name === parroquia[0]) {
+            console.log('parroquia[1]', parroquia[1]);
             item.properties.gdp_md_est = parroquia[1].toFixed(2);
           }
         });
@@ -175,15 +177,6 @@ export default function Home() {
     let data = [];
     dataMapa.map((item) => {
       data.push(parseInt(item.properties.gdp_md_est));
-    });
-    predictNextValues(data).then(async (result) => {
-      console.log('result', result);
-      setDataMapaPrediccion(
-        dataMapa.map((item, index) => {
-          item.properties.gdp_md_est = result[index];
-          return item;
-        }),
-      );
     });
   }, []);
 
@@ -197,15 +190,37 @@ export default function Home() {
       console.log('data', data);
       //modificar el ultimo registro de data
 
-      predictNextValues(data).then(async (result) => {
-        console.log('result', result);
+      // verificar si en asyncstorage existe prediccion
+      //si existe, entonces asignar a prediccion
+      //si no existe, entonces asignar a prediccion el resultado de la prediccion
+      //guardar en asyncstorage prediccion
+      //asignar a dataMapa el resultado de la prediccion
+      let _dataMapa = dataMapa;
+      if (localStorage.getItem('prediccion')) {
+        console.log('existe prediccion en localstorage');
+        let prediccion = localStorage.getItem('prediccion');
+        prediccion = JSON.parse(prediccion);
+
         setDataMapa(
-          dataMapa.map((item, index) => {
-            item.properties.gdp_md_est = result[index];
+          _dataMapa.map((item, index) => {
+            item.properties.gdp_md_est = prediccion[index];
             return item;
           }),
         );
-      });
+      } else {
+        predictNextValues(data).then(async (result) => {
+          console.log('no existe prediccion en localstorage');
+          console.log('result', result);
+          //guardar en localstorage prediccion
+          localStorage.setItem('prediccion', JSON.stringify(result));
+          setDataMapa(
+            _dataMapa.map((item, index) => {
+              item.properties.gdp_md_est = result[index];
+              return item;
+            }),
+          );
+        });
+      }
       // setDataMapaPrediccion(dataMapaPrediccion);
     } else {
       let ubicaciones = Ubicaciones;
@@ -370,16 +385,16 @@ export default function Home() {
               <div className="flex flex-column w-full border-cyan-800">
                 <VentanaDetalles dataHistorial={dataHistorial} filtroZona={filtroZona} />
                 <div className="flex flex-row h-full pt-5">
-                  <div className=" w-6 h-5rem pr-1 border-blue-300">
+                  <div className="flex  pr-1 border-blue-300">
                     <GraficoBarras
                       className="flex w-full h-5rem border-cyan-800"
                       dataHistorial={dataHistorial}
                       dataMapa={dataMapa}
                     />
                   </div>
-                  <div className="w-6">
+                  <div className="flex">
                     <GraficoBarrasTop
-                      className="flex w-5 border-cyan-800"
+                      className="flex w-full h-5rem  border-cyan-800"
                       dataHistorial={dataHistorial}
                       dataMapa={dataMapa}
                     />
